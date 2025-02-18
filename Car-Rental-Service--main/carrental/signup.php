@@ -1,18 +1,11 @@
 <?php
-session_start();
-
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
-    header("Location: index.php");
-    exit;
-}
-
-include 'includes/db_connection.php';
+require 'includes/db_connection.php';
 
 $errors = [];
 $success = "";
-$formData = [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Process form (server-side validation remains unchanged)
     $formData = [
         'firstName' => trim($_POST['firstName'] ?? ''),
         'lastName' => trim($_POST['lastName'] ?? ''),
@@ -22,49 +15,60 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'confirmPassword' => trim($_POST['confirmPassword'] ?? ''),
         'dob' => trim($_POST['dob'] ?? ''),
         'gender' => trim($_POST['gender'] ?? ''),
-        'state' => trim($_POST['state'] ?? '')
     ];
 
-    $errors = validateForm($formData, $pdo);
+    $errors = validateForm($formData);
 
     if (empty($errors)) {
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-        $stmt->execute([$formData['email']]);
-        if ($stmt->rowCount() > 0) {
-            $errors[] = "Email already exists.";
-        } else {
-            $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT);
-            $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, phone, email, password, dob, gender, state) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            if ($stmt->execute([$formData['firstName'], $formData['lastName'], $formData['phone'], $formData['email'], $hashedPassword, $formData['dob'], $formData['gender'], $formData['state']])) {
-                $success = "Registration successful! Redirecting...";
-                header("Refresh:3; url=login.php");
+        try {
+            $stmt = $pdo->prepare("SELECT user_id FROM users WHERE email = ?");
+            $stmt->execute([$formData['email']]);
+
+            if ($stmt->rowCount() > 0) {
+                $errors[] = "Email already exists.";
             } else {
-                $errors[] = "Something went wrong. Please try again.";
+                $hashedPassword = password_hash($formData['password'], PASSWORD_BCRYPT);
+                $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, phone, email, password, dob, gender) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+                if ($stmt->execute([$formData['firstName'], $formData['lastName'], $formData['phone'], $formData['email'], $hashedPassword, $formData['dob'], $formData['gender']])) {
+                    $success = "Registration successful! Redirecting...";
+                    echo "<script>setTimeout(() => window.location.href = 'login.php', 3000);</script>";
+                } else {
+                    $errors[] = "Something went wrong. Try again.";
+                }
             }
+        } catch (PDOException $e) {
+            $errors[] = "Database error: " . $e->getMessage();
         }
     }
 }
 
-function validateForm($data, $pdo)
+function validateForm($data)
 {
     $errors = [];
+
     foreach ($data as $key => $value) {
         if (empty($value)) {
-            $errors[$key] = ucfirst($key) . " is required.";
+            $errors[] = ucfirst($key) . " is required.";
         }
     }
+
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = "Invalid email format.";
+        $errors[] = "Invalid email format.";
     }
+
     if (!preg_match('/^[0-9]{10}$/', $data['phone'])) {
-        $errors['phone'] = "Phone number must be 10 digits.";
+        $errors[] = "Phone number must be 10 digits.";
     }
-    if ($data['password'] !== $data['confirmPassword']) {
-        $errors['confirmPassword'] = "Passwords do not match.";
-    }
+
     if (strlen($data['password']) < 6) {
-        $errors['password'] = "Password must be at least 6 characters.";
+        $errors[] = "Password must be at least 6 characters.";
     }
+
+    if ($data['password'] !== $data['confirmPassword']) {
+        $errors[] = "Passwords do not match.";
+    }
+
     return $errors;
 }
 ?>
@@ -79,7 +83,7 @@ function validateForm($data, $pdo)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-image: url('./assets/images/signimage.jpg');
+            background-image: url('https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -141,107 +145,157 @@ function validateForm($data, $pdo)
         }
 
         .error-message {
-            color: black;
+            color: #dc3545;
             font-size: 0.875rem;
         }
     </style>
+
+    <script>
+        function validateForm() {
+            let errors = [];
+            let formData = {
+                firstName: document.forms["signupForm"]["firstName"].value,
+                lastName: document.forms["signupForm"]["lastName"].value,
+                email: document.forms["signupForm"]["email"].value,
+                phone: document.forms["signupForm"]["phone"].value,
+                password: document.forms["signupForm"]["password"].value,
+                confirmPassword: document.forms["signupForm"]["confirmPassword"].value,
+                dob: document.forms["signupForm"]["dob"].value,
+                gender: document.forms["signupForm"]["gender"].value
+            };
+
+            // Reset previous error messages
+            document.querySelectorAll(".error-message").forEach(msg => msg.remove());
+
+            // First Name
+            if (formData.firstName === "") {
+                errors.push("First Name is required.");
+                document.getElementById("firstNameError").innerText = "First Name is required.";
+            }
+
+            // Last Name
+            if (formData.lastName === "") {
+                errors.push("Last Name is required.");
+                document.getElementById("lastNameError").innerText = "Last Name is required.";
+            }
+
+            // Email
+            if (formData.email === "") {
+                errors.push("Email is required.");
+                document.getElementById("emailError").innerText = "Email is required.";
+            } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+                errors.push("Invalid email format.");
+                document.getElementById("emailError").innerText = "Invalid email format.";
+            }
+
+            // Phone
+            if (formData.phone === "") {
+                errors.push("Phone number is required.");
+                document.getElementById("phoneError").innerText = "Phone number is required.";
+            } else if (!/^[0-9]{10}$/.test(formData.phone)) {
+                errors.push("Phone number must be 10 digits.");
+                document.getElementById("phoneError").innerText = "Phone number must be 10 digits.";
+            }
+
+            // Password
+            if (formData.password === "") {
+                errors.push("Password is required.");
+                document.getElementById("passwordError").innerText = "Password is required.";
+            } else if (formData.password.length < 6) {
+                errors.push("Password must be at least 6 characters.");
+                document.getElementById("passwordError").innerText = "Password must be at least 6 characters.";
+            }
+
+            // Confirm Password
+            if (formData.confirmPassword === "") {
+                errors.push("Confirm Password is required.");
+                document.getElementById("confirmPasswordError").innerText = "Confirm Password is required.";
+            } else if (formData.password !== formData.confirmPassword) {
+                errors.push("Passwords do not match.");
+                document.getElementById("confirmPasswordError").innerText = "Passwords do not match.";
+            }
+
+            // Gender
+            if (formData.gender === "") {
+                errors.push("Gender is required.");
+                document.getElementById("genderError").innerText = "Gender is required.";
+            }
+
+            // DOB
+            if (formData.dob === "") {
+                errors.push("Date of Birth is required.");
+                document.getElementById("dobError").innerText = "Date of Birth is required.";
+            }
+
+            return errors.length === 0;
+        }
+    </script>
 </head>
 
 <body>
     <div class="card shadow-sm p-4" style="max-width: 500px; width: 100%;">
         <h1 class="text-center mb-3">Join The Journey!</h1>
-        <p class="text-center text-muted mb-4">Sign up for our latest offers</p>
 
-        <?php if (!empty($success)): ?>
-            <div class="alert alert-success text-center"> <?= $success ?> </div>
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger">
+                <ul><?php foreach ($errors as $error) echo "<li>$error</li>"; ?></ul>
+            </div>
         <?php endif; ?>
 
-        <form method="POST" action="signup.php">
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success text-center"><?= $success ?></div>
+        <?php endif; ?>
+
+        <form name="signupForm" method="POST" action="signup.php" onsubmit="return validateForm()">
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <input type="text" class="form-control <?= isset($errors['firstName']) ? 'is-invalid' : '' ?>" name="firstName" placeholder="First Name" value="<?= htmlspecialchars($formData['firstName'] ?? '') ?>" required>
-                    <?php if (isset($errors['firstName'])): ?>
-                        <div class="error-message"><?= $errors['firstName'] ?></div>
-                    <?php endif; ?>
+                    <input type="text" class="form-control" name="firstName" placeholder="First Name" value="<?= htmlspecialchars($formData['firstName'] ?? '') ?>">
+                    <small id="firstNameError" class="error-message"></small>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" class="form-control <?= isset($errors['lastName']) ? 'is-invalid' : '' ?>" name="lastName" placeholder="Last Name" value="<?= htmlspecialchars($formData['lastName'] ?? '') ?>" required>
-                    <?php if (isset($errors['lastName'])): ?>
-                        <div class="error-message"><?= $errors['lastName'] ?></div>
-                    <?php endif; ?>
+                    <input type="text" class="form-control" name="lastName" placeholder="Last Name" value="<?= htmlspecialchars($formData['lastName'] ?? '') ?>">
+                    <small id="lastNameError" class="error-message"></small>
                 </div>
             </div>
+            
             <div class="mb-3">
-                <input type="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" name="email" placeholder="Enter Your Email" value="<?= htmlspecialchars($formData['email'] ?? '') ?>" required>
-                <?php if (isset($errors['email'])): ?>
-                    <div class="error-message"><?= $errors['email'] ?></div>
-                <?php endif; ?>
+                <input type="email" class="form-control" name="email" placeholder="Enter Your Email" value="<?= htmlspecialchars($formData['email'] ?? '') ?>">
+                <small id="emailError" class="error-message"></small>
             </div>
+
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <input type="date" class="form-control <?= isset($errors['dob']) ? 'is-invalid' : '' ?>" name="dob" value="<?= htmlspecialchars($formData['dob'] ?? '') ?>" required>
-                    <?php if (isset($errors['dob'])): ?>
-                        <div class="error-message"><?= $errors['dob'] ?></div>
-                    <?php endif; ?>
+                    <input type="date" class="form-control" name="dob" value="<?= htmlspecialchars($formData['dob'] ?? '') ?>">
+                    <small id="dobError" class="error-message"></small>
                 </div>
                 <div class="col-md-6">
-                    <select class="form-select <?= isset($errors['gender']) ? 'is-invalid' : '' ?>" name="gender" required>
+                    <select class="form-select" name="gender">
                         <option value="" disabled selected>Select Gender</option>
                         <option value="Male" <?= (isset($formData['gender']) && $formData['gender'] === 'Male') ? 'selected' : '' ?>>Male</option>
                         <option value="Female" <?= (isset($formData['gender']) && $formData['gender'] === 'Female') ? 'selected' : '' ?>>Female</option>
+                        <option value="Other" <?= (isset($formData['gender']) && $formData['gender'] === 'Other') ? 'selected' : '' ?>>Other</option>
                     </select>
-                    <?php if (isset($errors['gender'])): ?>
-                        <div class="error-message"><?= $errors['gender'] ?></div>
-                    <?php endif; ?>
+                    <small id="genderError" class="error-message"></small>
                 </div>
-            </div>
-            <div class="mb-3">
-                <select class="form-select <?= isset($errors['state']) ? 'is-invalid' : '' ?>" name="state" required>
-                    <option value="" disabled selected>Select Province</option>
-                    <option value="Alberta" <?= (isset($formData['state']) && $formData['state'] === 'Alberta') ? 'selected' : '' ?>>Alberta</option>
-                    <option value="British Columbia" <?= (isset($formData['state']) && $formData['state'] === 'British Columbia') ? 'selected' : '' ?>>British Columbia</option>
-                    <option value="Manitoba" <?= (isset($formData['state']) && $formData['state'] === 'Manitoba') ? 'selected' : '' ?>>Manitoba</option>
-                    <option value="New Brunswick" <?= (isset($formData['state']) && $formData['state'] === 'New Brunswick') ? 'selected' : '' ?>>New Brunswick</option>
-                    <option value="Newfoundland and Labrador" <?= (isset($formData['state']) && $formData['state'] === 'Newfoundland and Labrador') ? 'selected' : '' ?>>Newfoundland and Labrador</option>
-                    <option value="Nova Scotia" <?= (isset($formData['state']) && $formData['state'] === 'Nova Scotia') ? 'selected' : '' ?>>Nova Scotia</option>
-                    <option value="Ontario" <?= (isset($formData['state']) && $formData['state'] === 'Ontario') ? 'selected' : '' ?>>Ontario</option>
-                    <option value="Prince Edward Island" <?= (isset($formData['state']) && $formData['state'] === 'Prince Edward Island') ? 'selected' : '' ?>>Prince Edward Island</option>
-                    <option value="Quebec" <?= (isset($formData['state']) && $formData['state'] === 'Quebec') ? 'selected' : '' ?>>Quebec</option>
-                    <option value="Saskatchewan" <?= (isset($formData['state']) && $formData['state'] === 'Saskatchewan') ? 'selected' : '' ?>>Saskatchewan</option>
-                </select>
-                <?php if (isset($errors['state'])): ?>
-                    <div class="error-message"><?= $errors['state'] ?></div>
-                <?php endif; ?>
             </div>
 
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" value="+1 CA" readonly>
-                </div>
-                <div class="col-md-8">
-                    <input type="text" class="form-control <?= isset($errors['phone']) ? 'is-invalid' : '' ?>" name="phone" placeholder="Enter Mobile Number" value="<?= htmlspecialchars($formData['phone'] ?? '') ?>" required>
-                    <?php if (isset($errors['phone'])): ?>
-                        <div class="error-message"><?= $errors['phone'] ?></div>
-                    <?php endif; ?>
-                </div>
-            </div>
             <div class="mb-3">
-                <input type="password" class="form-control <?= isset($errors['password']) ? 'is-invalid' : '' ?>" name="password" placeholder="Enter Password" required>
-                <?php if (isset($errors['password'])): ?>
-                    <div class="error-message"><?= $errors['password'] ?></div>
-                <?php endif; ?>
+                <input type="text" class="form-control" name="phone" placeholder="Phone" value="<?= htmlspecialchars($formData['phone'] ?? '') ?>">
+                <small id="phoneError" class="error-message"></small>
             </div>
+
             <div class="mb-3">
-                <input type="password" class="form-control <?= isset($errors['confirmPassword']) ? 'is-invalid' : '' ?>" name="confirmPassword" placeholder="Confirm Password" required>
-                <?php if (isset($errors['confirmPassword'])): ?>
-                    <div class="error-message"><?= $errors['confirmPassword'] ?></div>
-                <?php endif; ?>
+                <input type="password" class="form-control" name="password" placeholder="Password">
+                <small id="passwordError" class="error-message"></small>
             </div>
-            <button type="submit" class="btn btn-danger w-100">Sign Up</button>
+
+            <div class="mb-3">
+                <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password">
+                <small id="confirmPasswordError" class="error-message"></small>
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100 py-3 mt-4">Sign Up</button>
         </form>
-        <div class="text-center mt-3">
-            <small class="text-muted">Already have an account? <a href="login.php" class="text-danger text-decoration-none">Login</a></small>
-        </div>
     </div>
 </body>
 
