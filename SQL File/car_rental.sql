@@ -1,6 +1,7 @@
 CREATE DATABASE car_rental_db;
 USE car_rental_db;
 
+
 -- Users Table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,6 +16,7 @@ CREATE TABLE users (
     role ENUM('User', 'Admin') NOT NULL DEFAULT 'User',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Cars Table
 CREATE TABLE cars (
@@ -70,4 +72,11 @@ CREATE TABLE admin_logs (
     record_id INT, -- Affected record's ID
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE car_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    car_id INT,
+    image_data LONGBLOB,
+    FOREIGN KEY (car_id) REFERENCES cars(car_id) ON DELETE CASCADE
 );

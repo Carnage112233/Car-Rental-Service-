@@ -76,75 +76,8 @@ function validateForm($data, $pdo)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up Form</title>
+    <link rel="stylesheet" href="assets/css/login_signup.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-image: url('./assets/images/signimage.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            max-width: 450px;
-            margin-right: 50%;
-            width: 100%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-        }
-
-        .form-control,
-        .form-select {
-            border-radius: 8px;
-            padding: 12px 15px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
-            border-color: #dc3545;
-        }
-
-        .btn-danger {
-            padding: 12px 0;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
-        }
-
-        h1 {
-            color: black;
-            font-weight: 700;
-        }
-
-        .error-message {
-            color: black;
-            font-size: 0.875rem;
-        }
-    </style>
 </head>
 
 <body>

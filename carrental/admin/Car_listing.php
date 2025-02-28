@@ -3,7 +3,7 @@ include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
 // Fetch all cars from the database
-$sql = "SELECT * FROM cars ORDER BY created_at DESC";
+$sql = "SELECT * FROM cars ORDER BY created_at ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $result = $stmt->fetchAll();  // Use fetchAll() for fetching the results
