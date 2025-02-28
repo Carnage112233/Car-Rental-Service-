@@ -147,3 +147,31 @@ body {
 .car-form .btn-primary:hover {
     background-color: #0056b3;
 }
+
+
+/* Modal Styles */
+.modal-content {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Modal Header */
+.modal-header {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Modal Footer */
+.modal-footer {
+    background-color: #f1f1f1;
+}
+
