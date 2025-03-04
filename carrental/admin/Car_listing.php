@@ -2,14 +2,29 @@
 include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
-// Fetch all cars from the database
+session_start();  
+
+if (isset($_SESSION['success_message'])) {
+    echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
+    unset($_SESSION['success_message']);
+}
+
 $sql = "SELECT * FROM cars ORDER BY created_at ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
-$result = $stmt->fetchAll();  // Use fetchAll() for fetching the results
+$result = $stmt->fetchAll();  
 ?>
 
 <main>
+<?php if (!empty($errors)): ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
         <h2 class="mt-4">Car Management</h2>
 
         <a href="add_car.php" class="btn btn-primary mb-3">Add New Car</a>
