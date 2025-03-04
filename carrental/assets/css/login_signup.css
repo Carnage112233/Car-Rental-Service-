@@ -68,12 +68,12 @@ p {
 }
 
 .btn-danger {
-    background-color: #dc3545;
+    background-color: #ff7b00;
     color: #fff;
 }
 
 .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #ff7b00;
 }
 
 .text-muted {

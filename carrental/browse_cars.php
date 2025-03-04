@@ -1,164 +1,132 @@
+<?php include 'includes/db_connection.php'; ?>
 <?php include 'includes/header.php'; ?>
 
-<style>
+<main class="car-list-main">
+    <div class="car-list-container">
+        <!-- Filter Sidebar -->
+        <section class="filter-sidebar">
+            <h3>Filter Cars</h3>
+            <form method="GET" action="">
+                <!-- Filter by Car Name -->
+                <label for="name">Car Name:</label>
+                <input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>" placeholder="Search by name">
 
-    .social-links {
-        display: flex;
-        gap: 10px;
-    }
+                <!-- Filter by Brand -->
+                <label for="brand">Brand:</label>
+                <select id="brand" name="brand">
+                    <option value="">All Brands</option>
+                    <option value="Toyota" <?php echo isset($_GET['brand']) && $_GET['brand'] == 'Toyota' ? 'selected' : ''; ?>>Toyota</option>
+                    <option value="Honda" <?php echo isset($_GET['brand']) && $_GET['brand'] == 'Honda' ? 'selected' : ''; ?>>Honda</option>
+                    <option value="Ford" <?php echo isset($_GET['brand']) && $_GET['brand'] == 'Ford' ? 'selected' : ''; ?>>Ford</option>
+                </select>
 
-    .social-links a {
-        color: #fff;
-        font-size: 1.2rem;
-        transition: color 0.3s ease;
-    }
+                <!-- Filter by Transmission -->
+                <label for="transmission">Transmission:</label>
+                <select id="transmission" name="transmission">
+                    <option value="">All Transmissions</option>
+                    <option value="Manual" <?php echo isset($_GET['transmission']) && $_GET['transmission'] == 'Manual' ? 'selected' : ''; ?>>Manual</option>
+                    <option value="Automatic" <?php echo isset($_GET['transmission']) && $_GET['transmission'] == 'Automatic' ? 'selected' : ''; ?>>Automatic</option>
+                </select>
 
-    .social-links a:hover {
-        color: #ff5722;
-    }
+                <!-- Filter by Availability (Date Range) -->
+                <label for="availability_start">Availability Start:</label>
+                <input type="date" id="availability_start" name="availability_start" value="<?php echo isset($_GET['availability_start']) ? $_GET['availability_start'] : ''; ?>">
 
-    .footer-bottom {
-        text-align: center;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #444;
-    }
+                <label for="availability_end">Availability End:</label>
+                <input type="date" id="availability_end" name="availability_end" value="<?php echo isset($_GET['availability_end']) ? $_GET['availability_end'] : ''; ?>">
 
-    .car-categories-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-        padding: 20px;
-    }
+                <!-- Clear Filter Button -->
+                <a href="browse_cars.php" class="clear-filter-button">Clear Filter</a>
+            </form>
+        </section>
 
-    .car-category {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        background-color: #333;
-        border-radius: 10px;
-        color: #fff;
-        font-size: 1rem;
-        text-align: center;
-        line-height: 150px;
-        overflow: hidden;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease, background-color 0.3s ease;
-    }
+        <!-- Car List -->
+        <section class="car-list">
+            <h1>Available Cars</h1>
+            <div class="car-card-list-container">
+                <?php
+                // Get filter parameters from the URL
+                $name = isset($_GET['name']) ? $_GET['name'] : '';
+                $brand = isset($_GET['brand']) ? $_GET['brand'] : '';
+                $transmission = isset($_GET['transmission']) ? $_GET['transmission'] : '';
+                $availability_start = isset($_GET['availability_start']) ? $_GET['availability_start'] : '';
+                $availability_end = isset($_GET['availability_end']) ? $_GET['availability_end'] : '';
 
-    .car-category:hover {
-        background-color: #555;
-        transform: scale(1.1);
-    }
+                try {
+                    // Base query to fetch available cars
+                    $query = "SELECT c.car_id, c.name, c.model_year, c.price_per_day, 
+                                     (SELECT image_data FROM car_images WHERE car_id = c.car_id LIMIT 1) AS image_data
+                              FROM cars c WHERE c.availability = 'available'";
 
-    .car-category::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: -1;
-        /* Ensure the image stays behind the text */
-    }
+                    // Apply filters dynamically
+                    $conditions = [];
+                    if ($name) {
+                        $conditions[] = "c.name LIKE :name";
+                    }
+                    if ($brand) {
+                        $conditions[] = "c.brand = :brand";
+                    }
+                    if ($transmission) {
+                        $conditions[] = "c.transmission = :transmission";
+                    }
+                    if ($availability_start && $availability_end) {
+                        $conditions[] = "(NOT EXISTS (SELECT 1 FROM bookings b WHERE b.car_id = c.car_id 
+                                                      AND ((b.start_date BETWEEN :availability_start AND :availability_end) 
+                                                      OR (b.end_date BETWEEN :availability_start AND :availability_end))))";
+                    }
 
-    .car-category:hover::after {
-        opacity: 1;
-    }
+                    // Append conditions to query
+                    if (count($conditions) > 0) {
+                        $query .= " AND " . implode(' AND ', $conditions);
+                    }
 
-    /* Images for Hover Effect */
-    .car-category:nth-child(1)::after {
-        background-image: url('assets/images/4.jpeg');
-    }
+                    $stmt = $pdo->prepare($query);
 
-    .car-category:nth-child(2)::after {
-        background-image: url('assets/images/10.jpeg');
-    }
+                    // Bind parameters for dynamic filters
+                    if ($name) {
+                        $stmt->bindValue(':name', '%' . $name . '%');
+                    }
+                    if ($brand) {
+                        $stmt->bindValue(':brand', $brand);
+                    }
+                    if ($transmission) {
+                        $stmt->bindValue(':transmission', $transmission);
+                    }
+                    if ($availability_start && $availability_end) {
+                        $stmt->bindValue(':availability_start', $availability_start);
+                        $stmt->bindValue(':availability_end', $availability_end);
+                    }
 
-    .car-category:nth-child(3)::after {
-        background-image: url('assets/images/suvs.jpg');
-    }
+                    $stmt->execute();
+                    $cars = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    .car-category:nth-child(4)::after {
-        background-image: url('assets/images/9.png');
-    }
+                    if ($cars) {
+                        foreach ($cars as $car) {
+                            // Convert image blob to base64 or use a default image
+                            $image = $car['image_data'] ? 'data:image/jpeg;base64,' . base64_encode($car['image_data']) : 'car_images/default.jpg';
 
-    .car-category:nth-child(5)::after {
-        background-image: url('assets/images/8.png');
-    }
-
-    .car-category:nth-child(6)::after {
-        background-image: url('assets/images/7.png');
-    }
-
-    .car-category:nth-child(7)::after {
-        background-image: url('assets/images/6.jpeg');
-    }
-
-    .car-category:nth-child(8)::after {
-        background-image: url('assets/images/5.png');
-    }
-
-    .car-category:nth-child(9)::after {
-        background-image: url('assets/images/11.jpeg');
-    }
-
-    .car-category:nth-child(10)::after {
-        background-image: url('assets/images/3.jpeg');
-    }
-
-    .car-category:nth-child(11)::after {
-        background-image: url('assets/images/2.jpeg');
-    }
-
-    .car-category:nth-child(12)::after {
-        background-image: url('assets/images/1.jpeg');
-    }
-
-    .car-category:nth-child(13)::after {
-        background-image: url('assets/images/hand-picked.jpg');
-    }
-
-    .car-category:nth-child(14)::after {
-        background-image: url('assets/images/discounted.jpg');
-    }
-
-
-    .social-icons a {
-        font-size: 24px;
-        margin: 0 10px;
-        text-decoration: none;
-    }
-</style>
-
-<main>
-    <section class="car-categories">
-        <h2>Browse by Car Type</h2>
-        <div class="car-categories-container">
-            <div class="car-category"><span>Toyota</span></div>
-            <div class="car-category"><span>Honda</span></div>
-            <div class="car-category"><span>SUVs</span></div>
-            <div class="car-category"><span>Chevrolet</span></div>
-            <div class="car-category"><span>Volkswagen</span></div>
-            <div class="car-category"><span>Ford</span></div>
-            <div class="car-category"><span>BMW</span></div>
-            <div class="car-category"><span>Mazda</span></div>
-            <div class="car-category"><span>Jaguar</span></div>
-            <div class="car-category"><span>Porsche</span></div>
-            <div class="car-category"><span>Audi</span></div>
-            <div class="car-category"><span>Tesla</span></div>
-            <div class="car-category"><span>Feature</span></div>
-            <div class="car-category"><span>Hand Picked</span></div>
-            <div class="car-category"><span>Upcoming Arrivals</span></div>
-        </div>
-    </section>
+                            // Generate a clickable link to the car details page
+                            echo "<div class='car-card-list'>
+                                    <a href='car_details.php?car_id={$car['car_id']}'>
+                                        <img src='$image' alt='{$car['name']}'>
+                                    </a>
+                                    <div class='car-info'>
+                                        <h2><a href='car_details.php?car_id={$car['car_id']}'>{$car['name']}</a></h2>
+                                        <p><strong>Year:</strong> {$car['model_year']}</p>
+                                        <p><strong>Price Per Day:</strong> $ {$car['price_per_day']}</p>
+                                    </div>
+                                  </div>";
+                        }
+                    } else {
+                        echo "<p>No cars available</p>";
+                    }
+                } catch (PDOException $e) {
+                    echo "<p>Error fetching cars: " . $e->getMessage() . "</p>";
+                }
+                ?>
+            </div>
+        </section>
+    </div>
 </main>
 
 <?php include 'includes/footer.php'; ?>
