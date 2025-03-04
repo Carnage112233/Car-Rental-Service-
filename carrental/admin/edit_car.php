@@ -12,7 +12,7 @@ if (!isset($_GET['id'])) {
 
 $car_id = $_GET['id'];
 
-// Fetch car details
+// Fetch car details, including car_type
 $sql = "SELECT * FROM cars WHERE car_id = :car_id";
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['car_id' => $car_id]);
@@ -33,10 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $seating_capacity = $_POST['seating_capacity'];
     $fuel_type = $_POST['fuel_type'];
     $transmission = $_POST['transmission'];
+    $car_type = $_POST['car_type']; // New field for car type
 
     $sql = "UPDATE cars SET name = :name, brand = :brand, model_year = :model_year, 
             price_per_day = :price_per_day, seating_capacity = :seating_capacity, 
-            fuel_type = :fuel_type, transmission = :transmission WHERE car_id = :car_id";
+            fuel_type = :fuel_type, transmission = :transmission, car_type = :car_type 
+            WHERE car_id = :car_id";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -47,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'seating_capacity' => $seating_capacity,
         'fuel_type' => $fuel_type,
         'transmission' => $transmission,
+        'car_type' => $car_type, // Pass the car_type to the query
         'car_id' => $car_id
     ]);
 
@@ -86,6 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="mb-3">
             <label for="transmission">Transmission:</label>
             <input type="text" name="transmission" value="<?= htmlspecialchars($car['transmission']); ?>" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="car_type">Car Type:</label>
+            <select name="car_type" class="form-control" required>
+                <option value="Sedan" <?= ($car['car_type'] == 'Sedan') ? 'selected' : ''; ?>>Sedan</option>
+                <option value="SUV" <?= ($car['car_type'] == 'SUV') ? 'selected' : ''; ?>>SUV</option>
+                <option value="Coupe" <?= ($car['car_type'] == 'Sport') ? 'selected' : ''; ?>>Coupe</option>
+                <option value="Convertible" <?= ($car['car_type'] == 'Convertible') ? 'selected' : ''; ?>>Convertible</option>
+            </select>
         </div>
         <button type="submit" class="btn btn-success">Update Car</button>
         <a href="Car_listing.php" class="btn btn-secondary">Cancel</a>

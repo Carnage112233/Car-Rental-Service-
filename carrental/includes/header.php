@@ -55,45 +55,48 @@ if (isset($_SESSION['id'])) {
                     <a class="nav-link <?= $current_page == 'index.php' ? 'active' : '' ?>" href="index.php">Home</a>
                     <a class="nav-link <?= $current_page == 'browse_cars.php' ? 'active' : '' ?>"
                         href="browse_cars.php">Browse Cars</a>
-                    <a class="nav-link <?= $current_page == 'contact.php' ? 'active' : '' ?>" href="contact.php">Contact
-                        Us</a>
+                    <a class="nav-link <?= $current_page == 'contact.php' ? 'active' : '' ?>" href="contact.php">Contact Us</a>
 
                     <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']): ?>
-                        <a class="nav-link <?= $current_page == 'my_bookings.php' ? 'active' : '' ?>"
-                            href="my_bookings.php">My Bookings</a>
-
                         <!-- Profile Dropdown -->
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="fa-solid fa-circle-user"
-                                    aria-hidden="true"><?= htmlspecialchars($user['first_name'] ?? 'User') ?></span>
+                                <span class="fa-solid fa-circle-user" aria-hidden="true"><?= htmlspecialchars($user['first_name'] ?? 'User') ?></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <li class="dropdown-item d-flex align-items-center">
                                     <div>
-                                        <div class="dropdown-header"><?= htmlspecialchars($user['first_name'] ?? 'User') ?>
-                                        </div>
+                                        <div class="dropdown-header"><?= htmlspecialchars($user['first_name'] ?? 'User') ?></div>
                                         <div class="text-muted small">
                                             <?= htmlspecialchars($user['email'] ?? 'example@email.com') ?>
                                         </div>
                                     </div>
                                 </li>
+                                <li><hr class="dropdown-divider"></li>
+
+                                <!-- "My Bookings" link inside the dropdown -->
                                 <li>
-                                    <hr class="dropdown-divider">
+                                    <a class="dropdown-item <?= $current_page == 'my_bookings.php' ? 'active' : '' ?>" href="my_bookings.php">
+                                        My Bookings
+                                    </a>
                                 </li>
+
                                 <li><a class="dropdown-item text-center text-danger" href="logout.php">Logout</a></li>
                             </ul>
                         </div>
 
                     <?php else: ?>
-                        <a class="nav-link <?= $current_page == 'signup.php' ? 'active' : '' ?>" href="signup.php">Sign
-                            Up</a>
+                        <a class="nav-link <?= $current_page == 'signup.php' ? 'active' : '' ?>" href="signup.php">Sign Up</a>
                         <a class="nav-link <?= $current_page == 'login.php' ? 'active' : '' ?>" href="login.php">Login</a>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
     </nav>
+
+    <!-- Bootstrap 5 JS Bundle (includes Popper.js for dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

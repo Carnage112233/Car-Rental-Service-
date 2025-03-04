@@ -11,13 +11,14 @@
                 <label for="name">Car Name:</label>
                 <input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>" placeholder="Search by name">
 
-                <!-- Filter by Brand -->
-                <label for="brand">Brand:</label>
-                <select id="brand" name="brand">
-                    <option value="">All Brands</option>
-                    <option value="Toyota" <?php echo isset($_GET['brand']) && $_GET['brand'] == 'Toyota' ? 'selected' : ''; ?>>Toyota</option>
-                    <option value="Honda" <?php echo isset($_GET['brand']) && $_GET['brand'] == 'Honda' ? 'selected' : ''; ?>>Honda</option>
-                    <option value="Ford" <?php echo isset($_GET['brand']) && $_GET['brand'] == 'Ford' ? 'selected' : ''; ?>>Ford</option>
+                <!-- Filter by Car Type -->
+                <label for="car_type">Car Type:</label>
+                <select id="car_type" name="car_type">
+                    <option value="">All Types</option>
+                    <option value="SUV" <?php echo isset($_GET['car_type']) && $_GET['car_type'] == 'SUV' ? 'selected' : ''; ?>>SUV</option>
+                    <option value="Sedan" <?php echo isset($_GET['car_type']) && $_GET['car_type'] == 'Sedan' ? 'selected' : ''; ?>>Sedan</option>
+                    <option value="Sport" <?php echo isset($_GET['car_type']) && $_GET['car_type'] == 'Sport' ? 'selected' : ''; ?>>Sport</option>
+                    <option value="Convertible" <?php echo isset($_GET['car_type']) && $_GET['car_type'] == 'Convertible' ? 'selected' : ''; ?>>Convertible</option>
                 </select>
 
                 <!-- Filter by Transmission -->
@@ -35,6 +36,9 @@
                 <label for="availability_end">Availability End:</label>
                 <input type="date" id="availability_end" name="availability_end" value="<?php echo isset($_GET['availability_end']) ? $_GET['availability_end'] : ''; ?>">
 
+                <!-- Filter Button -->
+                <button type="submit" class="filter-button">Apply Filter</button>
+
                 <!-- Clear Filter Button -->
                 <a href="browse_cars.php" class="clear-filter-button">Clear Filter</a>
             </form>
@@ -47,7 +51,7 @@
                 <?php
                 // Get filter parameters from the URL
                 $name = isset($_GET['name']) ? $_GET['name'] : '';
-                $brand = isset($_GET['brand']) ? $_GET['brand'] : '';
+                $car_type = isset($_GET['car_type']) ? $_GET['car_type'] : '';
                 $transmission = isset($_GET['transmission']) ? $_GET['transmission'] : '';
                 $availability_start = isset($_GET['availability_start']) ? $_GET['availability_start'] : '';
                 $availability_end = isset($_GET['availability_end']) ? $_GET['availability_end'] : '';
@@ -63,16 +67,22 @@
                     if ($name) {
                         $conditions[] = "c.name LIKE :name";
                     }
-                    if ($brand) {
-                        $conditions[] = "c.brand = :brand";
+                    if ($car_type) {
+                        $conditions[] = "c.car_type = :car_type";
                     }
                     if ($transmission) {
                         $conditions[] = "c.transmission = :transmission";
                     }
                     if ($availability_start && $availability_end) {
-                        $conditions[] = "(NOT EXISTS (SELECT 1 FROM bookings b WHERE b.car_id = c.car_id 
-                                                      AND ((b.start_date BETWEEN :availability_start AND :availability_end) 
-                                                      OR (b.end_date BETWEEN :availability_start AND :availability_end))))";
+                        $conditions[] = "(NOT EXISTS (
+                                            SELECT 1 FROM bookings b 
+                                            WHERE b.car_id = c.car_id 
+                                            AND (
+                                                (b.start_date BETWEEN :availability_start AND :availability_end)
+                                                OR (b.end_date BETWEEN :availability_start AND :availability_end)
+                                                OR (b.start_date <= :availability_start AND b.end_date >= :availability_end) 
+                                            )
+                                        ))";
                     }
 
                     // Append conditions to query
@@ -86,8 +96,8 @@
                     if ($name) {
                         $stmt->bindValue(':name', '%' . $name . '%');
                     }
-                    if ($brand) {
-                        $stmt->bindValue(':brand', $brand);
+                    if ($car_type) {
+                        $stmt->bindValue(':car_type', $car_type);
                     }
                     if ($transmission) {
                         $stmt->bindValue(':transmission', $transmission);

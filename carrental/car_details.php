@@ -8,8 +8,9 @@
             $car_id = $_GET['car_id'];
 
             try {
-                // Updated query to fetch additional car details
-                $query = "SELECT c.car_id, c.name, c.model_year, c.price_per_day, c.brand, c.seating_capacity, c.fuel_type, c.transmission
+                // Updated query to fetch additional car details including car type
+                $query = "SELECT c.car_id, c.name, c.model_year, c.price_per_day, c.brand, c.seating_capacity, 
+                                 c.fuel_type, c.transmission, c.car_type
                           FROM cars c WHERE c.car_id = :car_id AND c.availability = 'available'";
 
                 $stmt = $pdo->prepare($query);
@@ -39,7 +40,7 @@
                     }
                     echo "</div>";
 
-                    // Display car details
+                    // Display car details including car type
                     echo "<div class='car-info'>
                             <h1>{$car['name']}</h1>
                             <p><strong>Model Year:</strong> {$car['model_year']}</p>
@@ -48,6 +49,7 @@
                             <p><strong>Seating Capacity:</strong> {$car['seating_capacity']} seats</p>
                             <p><strong>Fuel Type:</strong> {$car['fuel_type']}</p>
                             <p><strong>Transmission:</strong> {$car['transmission']}</p>
+                            <p><strong>Car Type:</strong> {$car['car_type']}</p> <!-- Display Car Type -->
                           </div>";
                     
                     // Add a "Book Now" button that leads to a booking page or form

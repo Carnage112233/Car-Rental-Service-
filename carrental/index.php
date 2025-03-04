@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
-<main>
-    <section class="hero">
+<main class="index-main"> <!-- Add a class to the main tag -->
+    <section class="hero index-hero"> <!-- Add a class to this section -->
         <div class="container">
             <h1>Rent the Best Cars for Your Journey</h1>
             <p>Explore our wide range of luxury and economy cars at affordable prices.</p>
@@ -8,7 +8,7 @@
         </div>
     </section>
 
-    <section class="search">
+    <section class="search index-search"> <!-- Add a class to this section -->
         <div class="container">
             <h2>Find Your Perfect Car</h2>
             <form class="search-form">
@@ -21,7 +21,7 @@
     </section>
 
     <!-- Fleet Section -->
-    <section class="fleet" id="fleet">
+    <section class="fleet index-fleet" id="fleet"> <!-- Add a class to this section -->
         <div class="container">
             <h2>Our Fleet</h2>
             <div class="fleet-grid">
@@ -48,7 +48,7 @@
     </section>
 
     <!-- Services Section -->
-    <section class="services" id="services">
+    <section class="services index-services" id="services"> <!-- Add a class to this section -->
         <div class="container">
             <h2>Our Services</h2>
             <div class="service-grid">
@@ -72,7 +72,7 @@
     </section>
 
     <!-- Location Section -->
-    <section class="location-section">
+    <section class="location-section index-location"> <!-- Add a class to this section -->
         <div class="location-container">
             <!-- Google Map -->
             <div class="map-container">
@@ -84,8 +84,8 @@
 
             <!-- Location Details -->
             <div class="location-details">
-                <h2>Kitchener </h2>
-                <p><i class="fas fa-map-marker-alt"></i> 115 conway, Kitchener, ON, CA, N2A 2C8</p>
+                <h2>Kitchener</h2>
+                <p><i class="fas fa-map-marker-alt"></i> 115 Conway, Kitchener, ON, CA, N2A 2C8</p>
                 <p><i class="fas fa-phone-alt"></i> <a href="tel:+15198936800">+1 382-885-2208</a></p>
                 <p><a href="https://goo.gl/maps/DzZJ6gEoULX8NDAE6" target="_blank">Get Directions <i class="fas fa-external-link-alt"></i></a></p>
 
@@ -110,18 +110,16 @@
     </section>
 
     <!-- About Us Section -->
-    <section class="about" id="about">
+    <section class="about index-about" id="about"> <!-- Add a class to this section -->
         <div class="container">
             <h2>About Us</h2>
-            <p>We are a leading car rental service provider with over 10 years of experience. Our mission is to
-                offer
-                the best vehicles and customer service to make your journey unforgettable.</p>
+            <p>We are a leading car rental service provider with over 10 years of experience. Our mission is to offer the best vehicles and customer service to make your journey unforgettable.</p>
             <a href="#contact" class="btn">Learn More</a>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="contact" id="contact">
+    <section class="contact index-contact" id="contact"> <!-- Add a class to this section -->
         <div class="container">
             <h2>Contact Us</h2>
             <form id="contact-form">

@@ -2,7 +2,6 @@
 include '../includes/db_connection.php'; 
 include '../includes/admin_header.php';  
 
-
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,9 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $seating_capacity = trim($_POST['seating_capacity']);
     $fuel_type = trim($_POST['fuel_type']);
     $transmission = trim($_POST['transmission']);
+    $car_type = trim($_POST['car_type']);  // New field
 
     // Validate fields
-    if (empty($name) || empty($brand) || empty($model_year) || empty($price_per_day) || empty($seating_capacity) || empty($fuel_type) || empty($transmission)) {
+    if (empty($name) || empty($brand) || empty($model_year) || empty($price_per_day) || empty($seating_capacity) || empty($fuel_type) || empty($transmission) || empty($car_type)) {
         $errors[] = "All fields are required.";
     }
     if (!ctype_digit($model_year) || $model_year < 1900 || $model_year > date("Y")) {
@@ -27,11 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!ctype_digit($seating_capacity) || $seating_capacity <= 0) {
         $errors[] = "Seating capacity must be a positive whole number.";
     }
+    if (empty($car_type)) {
+        $errors[] = "Car type is required.";
+    }
 
     if (empty($errors)) {
         try {
-            $sql = "INSERT INTO cars (name, brand, model_year, price_per_day, seating_capacity, fuel_type, transmission, added_by) 
-                    VALUES (:name, :brand, :model_year, :price_per_day, :seating_capacity, :fuel_type, :transmission, :added_by)";
+            // Insert data into the database
+            $sql = "INSERT INTO cars (name, brand, model_year, price_per_day, seating_capacity, fuel_type, transmission, car_type, added_by) 
+                    VALUES (:name, :brand, :model_year, :price_per_day, :seating_capacity, :fuel_type, :transmission, :car_type, :added_by)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ':name' => htmlspecialchars($name),
@@ -41,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':seating_capacity' => $seating_capacity,
                 ':fuel_type' => htmlspecialchars($fuel_type),
                 ':transmission' => htmlspecialchars($transmission),
+                ':car_type' => htmlspecialchars($car_type),  // New field
                 ':added_by' => $admin_id
             ]);
 
@@ -94,7 +99,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main>
     <h2>Add New Car</h2>
 
-
+    <?php 
+    // Display errors
+    if (!empty($errors)) {
+        echo '<ul class="errors">';
+        foreach ($errors as $error) {
+            echo "<li>$error</li>";
+        }
+        echo '</ul>';
+    }
+    ?>
 
     <form action="add_car.php" method="POST" enctype="multipart/form-data" class="car-form">
         <div class="form-group">
@@ -130,6 +144,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="form-group">
             <label for="transmission">Transmission:</label>
             <input type="text" name="transmission" id="transmission" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="car_type">Car Type:</label>
+            <select name="car_type" id="car_type" required class="form-control">
+                <option value="">Select Car Type</option>
+                <option value="SUV">SUV</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Sport">Sport</option>
+                <option value="Convertible">Convertible</option>
+            </select>
         </div>
 
         <div class="form-group">

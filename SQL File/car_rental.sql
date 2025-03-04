@@ -34,6 +34,10 @@ CREATE TABLE cars (
     FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
+ALTER TABLE cars
+ADD COLUMN car_type ENUM('SUV', 'Sedan', 'Sport', 'Convertible') NOT NULL
+AFTER brand;
+
 -- Bookings Table
 CREATE TABLE bookings (
     booking_id INT AUTO_INCREMENT PRIMARY KEY,

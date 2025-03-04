@@ -178,78 +178,91 @@ body {
     color: #333;
 }
 
-.container {
-    width: 90%;
-    margin: 0 auto;
-    max-width: 1200px;
-}
-
-h1, h2, h3 {
-    margin-bottom: 20px;
-    color: #333;
+/* Main Content */
+.index-main {
+    margin-top: 20px;
 }
 
 /* Hero Section */
-.hero {
+.index-hero {
     background: url('../images/home1.jpg') no-repeat center center/cover;
-    color: #fff;
+    color: white;
     padding: 80px 0;
     text-align: center;
 }
 
-.hero h1 {
-    font-size: 3rem;
+.index-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
 }
 
-.hero p {
+.index-hero p {
     font-size: 1.2rem;
     margin-bottom: 30px;
 }
 
-.hero .btn {
-    background-color: #ff7b00;
-    color: #fff;
-    padding: 10px 30px;
-    border-radius: 30px;
+.index-hero .btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    background-color: #ff5722;
+    color: white;
     text-decoration: none;
-    font-weight: bold;
+    border-radius: 5px;
+}
+
+.index-hero .btn:hover {
+    background-color: #e64a19;
 }
 
 /* Search Section */
-.search {
+.index-search {
     background-color: #fff;
-    padding: 60px 0;
+    padding: 40px 0;
     text-align: center;
+}
+
+.index-search h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
 .search-form {
     display: flex;
+    justify-content: center;
     gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-    justify-content: center;  
-    align-items: center;     
-    width: 100%;              
 }
 
 .search-form input, .search-form button {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.search-form input {
+    width: 200px;
 }
 
 .search-form button {
-    background-color: #ff7b00;
+    background-color: #ff5722;
     color: white;
     cursor: pointer;
 }
 
+.search-form button:hover {
+    background-color: #e64a19;
+}
+
 /* Fleet Section */
-.fleet {
-    background-color: #f9f9f9;
+.index-fleet {
+    background-color: #fff;
     padding: 60px 0;
+}
+
+.index-fleet h2 {
+    font-size: 2rem;
     text-align: center;
+    margin-bottom: 40px;
 }
 
 .fleet-grid {
@@ -259,161 +272,314 @@ h1, h2, h3 {
 }
 
 .car-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-.car-card:hover {
-    transform: translateY(-10px);
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .car-card img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
 .car-card h3 {
-    margin: 20px 0 10px;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
 }
 
 .car-card p {
+    font-size: 1rem;
     margin-bottom: 20px;
 }
 
 .car-card .btn {
-    background-color: #ff7b00;
+    background-color: #ff5722;
     color: white;
     padding: 10px 20px;
-    border-radius: 5px;
     text-decoration: none;
+    border-radius: 5px;
+}
+
+.car-card .btn:hover {
+    background-color: #e64a19;
 }
 
 /* Services Section */
-.services {
-    background-color: #fff;
+.index-services {
+    background-color: #f7f7f7;
     padding: 60px 0;
+}
+
+.index-services h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .service-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 30px;
+    justify-items: center;
 }
 
 .service-card {
-    background-color: #f9f9f9;
-    border-radius: 10px;
+    background-color: white;
     padding: 30px;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
 }
 
 .service-card i {
     font-size: 3rem;
     margin-bottom: 20px;
-    color: #ff7b00;
 }
 
 .service-card h3 {
+    font-size: 1.5rem;
     margin-bottom: 10px;
 }
 
 .service-card p {
     font-size: 1rem;
-    color: #555;
 }
 
 /* Location Section */
-.location-section {
-    display: flex;
-    justify-content: space-between;
+.index-location {
+    background-color: #fff;
     padding: 60px 0;
-    background-color: #f4f4f4;
 }
 
-.map-container iframe {
-    border-radius: 10px;
+.location-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.map-container {
+    width: 100%;
+    max-width: 800px;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .location-details {
-    max-width: 500px;
+    text-align: center;
+    max-width: 800px;
 }
 
 .location-details h2 {
     font-size: 2rem;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .location-details p {
+    font-size: 1rem;
     margin-bottom: 10px;
 }
 
-.location-details .hours-list p {
-    margin: 5px 0;
-}
-
-.service-icons {
-    display: flex;
-    gap: 20px;
-    margin-top: 30px;
-    font-size: 1.1rem;
-}
-
-.service-icons span {
-    display: flex;
-    align-items: center;
-}
-
-.service-icons i {
-    margin-right: 10px;
-}
-
-/* About Us Section */
-.about {
-    background-color: #fff;
-    padding: 60px 0;
-    text-align: center;
-}
-
-.about p {
-    margin-bottom: 20px;
-}
-
-.about .btn {
-    background-color: #ff7b00;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 30px;
+.location-details a {
+    color: #ff5722;
     text-decoration: none;
 }
 
-/* Contact Section */
-.contact {
-    background-color: #f4f4f4;
+.location-details a:hover {
+    text-decoration: underline;
+}
+
+.hours-list {
+    margin-top: 20px;
+}
+
+.hours-list p {
+    font-size: 1rem;
+}
+
+.service-icons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.service-icons span {
+    font-size: 1rem;
+}
+
+.service-icons span i {
+    margin-right: 5px;
+}
+
+/* About Us Section */
+.index-about {
+    background-color: #f7f7f7;
     padding: 60px 0;
 }
 
-#contact-form input, #contact-form textarea {
-    width: 100%;
-    padding: 10px;
+.index-about h2 {
+    font-size: 2rem;
+    text-align: center;
     margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+}
+
+.index-about p {
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.index-about .btn {
+    display: inline-block;
     font-size: 1rem;
+    padding: 10px 20px;
+    background-color: #ff5722;
+    color: white;
+
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.index-about .btn:hover {
+    background-color: #e64a19;
+}
+
+/* Contact Section */
+.index-contact {
+    background-color: #fff;
+    padding: 60px 0;
+}
+
+.index-contact h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#contact-form input, #contact-form textarea {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 #contact-form button {
-    background-color: #ff7b00;
+    background-color: #ff5722;
     color: white;
-    padding: 10px 30px;
-    border-radius: 5px;
+    padding: 12px;
     font-size: 1rem;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
 }
+
+#contact-form button:hover {
+    background-color: #e64a19;
+}
+
+/* Responsive Styles */
+
+/* Mobile Devices (up to 600px) */
+@media (max-width: 600px) {
+    .index-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .index-hero p {
+        font-size: 1rem;
+    }
+
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .fleet-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .location-container {
+        gap: 20px;
+    }
+
+    .map-container {
+        height: 200px;
+    }
+
+    .index-contact h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Tablets (600px to 900px) */
+@media (max-width: 900px) {
+    .index-hero h1 {
+        font-size: 2rem;
+    }
+
+    .search-form {
+        flex-direction: row;
+    }
+
+    .fleet-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .service-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .map-container {
+        height: 250px;
+    }
+}
+
+/* Desktops (Above 900px) */
+@media (min-width: 900px) {
+    .index-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .search-form {
+        justify-content: center;
+    }
+
+    .fleet-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .service-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 
 
 /* Main container for both sections */
@@ -457,6 +623,24 @@ h1, h2, h3 {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+
+.filter-button {
+    display: inline-block;
+    background-color: #ff7b00;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.filter-button:hover {
+    background-color: #d72c38;
+}
+
+
 
 .clear-filter-button {
     display: inline-block;
@@ -606,69 +790,59 @@ h1, h2, h3 {
     }
 }
 
-/* Car information details styling */
 .car-info {
-    flex: 1;
-    max-width: 600px;
+    background-color: #fff;
+    border-radius: 10px;
     padding: 20px;
-    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   
+    width: 100%;
+    max-width: 500px;
+    transition: all 0.3s ease;
 }
 
-/* Car name styling */
 .car-info h1 {
-    font-size: 2.5em;
-    margin-bottom: 15px;
+    font-size: 24px;
     color: #333;
+    margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Car details (model, price, etc.) */
 .car-info p {
-    font-size: 1.2em;
+    font-size: 16px;
     color: #555;
-    margin: 10px 0;
+    margin: 8px 0;
+    line-height: 1.6;
 }
 
-/* Styling for car details section */
 .car-info p strong {
     color: #333;
-    font-weight: 600;
+    font-weight: bold;
 }
 
-
-
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .car-details-card {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .car-images-gallery {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .car-image {
-        width: 100%;
-        height: auto;
-        max-width: 300px;
-    }
-}
-
-
-.book-now-btn {
+.car-info .book-now-btn {
     margin-top: 20px;
     text-align: center;
 }
 
-.btn-book-now {
-    padding: 10px 20px;
-    background-color:#ff7b00;
-    color: white;
+.book-now-btn .btn-book-now {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #ff7b00;
+    color: #fff;
     text-decoration: none;
-    font-size: 16px;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    font-size: 18px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
 }
 
+.book-now-btn .btn-book-now:hover {
+    background-color: #d72c38;
+}
+
+/* Hover effect for car-info container */
+.car-info:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
