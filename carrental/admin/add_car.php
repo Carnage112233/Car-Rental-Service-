@@ -85,8 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if (empty($errors)) {
+                // Set success message and redirect to car_listing page
                 $_SESSION['success_message'] = "Car added successfully!";
-                header("Location: add_car.php");
+                header("Location: car_listing.php");
                 exit;
             }
         } catch (PDOException $e) {

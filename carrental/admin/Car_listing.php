@@ -34,7 +34,7 @@ $result = $stmt->fetchAll();
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>ID</th>
+            <th></th> <!-- Change the column header to Index -->
             <th>Name</th>
             <th>Brand</th>
             <th>Model Year</th>
@@ -48,9 +48,10 @@ $result = $stmt->fetchAll();
         </tr>
     </thead>
     <tbody>
+        <?php $index = 1; // Initialize index variable ?>
         <?php foreach ($result as $row) { ?>
             <tr>
-                <td><?= htmlspecialchars($row['car_id']); ?></td>
+                <td><?= $index++; ?></td> <!-- Display the index instead of car_id -->
                 <td><?= htmlspecialchars($row['name']); ?></td>
                 <td><?= htmlspecialchars($row['brand']); ?></td>
                 <td><?= htmlspecialchars($row['model_year']); ?></td>
