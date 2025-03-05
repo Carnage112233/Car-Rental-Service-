@@ -24,12 +24,12 @@
             <div class="footer-section">
                 <h3>Contact Info</h3>
                 <p>Email: info@carrental.com</p>
-                <p>Phone: +1 234 567 890</p>
-                <p>Address: 123 Car Street, Rent City</p>
+                <p>Phone: +1 123 456 7890</p>
+                <p>Address: 111 ABC, Kitchener, ON, CA, N2A 2C8</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2023 Car Rental Service. All rights reserved.</p>
+            <p>&copy; 2025 Car Rental Service. All rights reserved.</p>
         </div>
     </div>
 </footer>
