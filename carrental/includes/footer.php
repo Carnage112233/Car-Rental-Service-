@@ -5,11 +5,9 @@
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="#home">Home</a></li>
-                    <li><a href="#search">Search</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#fleet">Our Fleet</a></li>
+                    <li><a href="browse_cars">Browse Car</a></li>
                     <li><a href="#about">About Us</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="contact.php">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
