@@ -1,19 +1,16 @@
 <?php
 session_start();
-require 'includes/db_connection.php';  // Ensure the path is correct
+require 'includes/db_connection.php'; 
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Define an array of public pages (accessible without login)
 $public_pages = ['index.php', 'about.php', 'contact.php', 'browse_cars.php', 'car_details.php'];
 
-// If the user is not logged in and is trying to access a restricted page (like booking), redirect to login
 if (!isset($_SESSION['loggedin']) && !in_array($current_page, $public_pages)) {
     header('Location: login.php');
     exit;
 }
 
-// Fetch user data if logged in
 $user = [];
 if (isset($_SESSION['id'])) {
     $stmt = $pdo->prepare("SELECT first_name, email FROM users WHERE id = ?");

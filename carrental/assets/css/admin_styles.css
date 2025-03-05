@@ -11,13 +11,13 @@ body {
 /* Sidebar Styles */
 .sidebar {
     width: 250px;
-    background-color: #222; /* Dark gray for sidebar */
+    background-color: #222; 
     color: white;
     padding-top: 20px;
     position: fixed;
     height: 100%;
     transition: all 0.3s ease-in-out;
-    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2); /* Soft shadow for separation */
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2); 
 }
 
 .sidebar .logo {
@@ -35,13 +35,13 @@ body {
     text-decoration: none;
     transition: 0.3s;
     font-size: 16px;
-    border-bottom: 1px solid #333; /* Subtle separator between links */
+    border-bottom: 1px solid #333; 
 }
 
 .sidebar a:hover,
 .sidebar a.active {
-    background: #333; /* Darker background on hover */
-    border-left: 5px solid #fff; /* White border on hover for emphasis */
+    background: #333; 
+    border-left: 5px solid #fff; 
 }
 
 /* Sidebar collapse effect */
@@ -58,120 +58,6 @@ body {
     text-align: center;
 }
 
-/* Content Styles */
-.content {
-    margin-left: 250px; /* Sidebar width */
-    padding: 30px;
-    width: calc(100% - 250px); /* Adjust width to fill the remaining space */
-    transition: margin-left 0.3s ease-in-out;
-}
-
-/* To ensure content area doesn't become too narrow */
-.content .container {
-    max-width: 1200px; /* You can adjust this based on your desired form width */
-    margin: 0 auto; /* Center the content */
-}
-
-/* Card Styling */
-.card {
-    background-color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* More pronounced shadow */
-    border-radius: 8px;
-    margin-bottom: 30px;
-    overflow: hidden;
-}
-
-.card-header {
-    background: #222; /* Dark background for header */
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    padding: 15px;
-    border-bottom: 2px solid #444; /* Divider for header */
-}
-
-.card-body {
-    padding: 20px;
-    background-color: #fff; /* White background for body */
-}
-
-/* Scoped to add-car-page */
-#add-car-page {
-    max-width: 800px; /* Form max width */
-    margin: 50px auto; /* Center the form on the page */
-    padding: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-/* Styling for form fields */
-.car-form .form-group {
-    margin-bottom: 20px;
-}
-
-.car-form .form-group label {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    display: block;
-}
-
-.car-form .form-control {
-    width: 100%; /* Full width for input fields */
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
-}
-
-.car-form .form-control:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-/* Styling for the submit button */
-.car-form .btn-primary {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    width: 100%;
-}
-
-.car-form .btn-primary:hover {
-    background-color: #0056b3;
-}
 
 
-/* Modal Styles */
-.modal-content {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Modal Header */
-.modal-header {
-    background-color: #007bff;
-    color: white;
-}
-
-/* Modal Body */
-.modal-body {
-    padding: 20px;
-    background-color: #f9f9f9;
-}
-
-/* Modal Footer */
-.modal-footer {
-    background-color: #f1f1f1;
-}
 

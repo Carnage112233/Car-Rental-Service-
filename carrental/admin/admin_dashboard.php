@@ -1,39 +1,73 @@
 <?php include '../includes/admin_header.php'; ?>
+<?php include '../includes/db_connection.php'; ?>
 
 <!-- Main Content -->
 <main>
     <?php
-    $totalCars = 50; 
-    $totalUsers = 200; 
-    $totalBookings = 120; 
-    
-    if (isset($_GET['section'])) {
-        $section = $_GET['section'];
-        switch ($section) {
-            case 'card_management':
-                echo '<div class="card"><div class="card-header">Card Management</div><div class="card-body">';
-                echo '<h5>Manage your cards here.</h5>';
-                echo '<p>Total Cars: ' . $totalCars . '</p>';
-                echo '<p>Total Users: ' . $totalUsers . '</p>';
-                echo '<p>Total Bookings: ' . $totalBookings . '</p>';
-                echo '</div></div>';
-                break;
-            case 'listing':
-                echo '<div class="card"><div class="card-header">Listing</div><div class="card-body"><h5>Manage your listings here.</h5></div></div>';
-                break;
-            case 'user_management':
-                echo '<div class="card"><div class="card-header">User Management</div><div class="card-body"><h5>Manage user data here.</h5></div></div>';
-                break;
-            case 'car_request':
-                echo '<div class="card"><div class="card-header">User Car Requests</div><div class="card-body"><h5>Manage car requests here.</h5></div></div>';
-                break;
-            default:
-                echo "<h2>Welcome to the Admin Panel</h2>";
-        }
-    } else {
-        echo "<h2>Welcome to the Admin Panel</h2>";
+    try {
+        // Fetch total number of cars (only available cars)
+        $carQuery = "SELECT COUNT(*) AS totalCars FROM cars WHERE availability = 'available'";
+        $stmt = $pdo->prepare($carQuery);
+        $stmt->execute();
+        $carData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $totalCars = $carData['totalCars'];
+
+        // Fetch total number of users
+        $userQuery = "SELECT COUNT(*) AS totalUsers FROM users";
+        $stmt = $pdo->prepare($userQuery);
+        $stmt->execute();
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $totalUsers = $userData['totalUsers'];
+
+        // Fetch total number of bookings (only confirmed bookings)
+        $bookingQuery = "SELECT COUNT(*) AS totalBookings FROM bookings WHERE status = 'confirmed'";
+        $stmt = $pdo->prepare($bookingQuery);
+        $stmt->execute();
+        $bookingData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $totalBookings = $bookingData['totalBookings'];
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
     ?>
+
+    <!-- Overview Cards Section -->
+    <div class="row">
+        <!-- Total Cars Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">
+                    Total Cars: <?php echo $totalCars; ?>
+                </div>
+                <div class="card-body">
+                    <a href="Car_listing.php" class="btn btn-light">Go to Cars</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Users Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">
+                    Total Users: <?php echo $totalUsers; ?>
+                </div>
+                <div class="card-body">
+                    <a href="user_list.php" class="btn btn-light">Go to Users</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Bookings Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">
+                    Total Bookings: <?php echo $totalBookings; ?>
+                </div>
+                <div class="card-body">
+                    <a href="manage_bookings.php" class="btn btn-light">Go to Bookings</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <?php include '../includes/admin_footer.php'; ?>

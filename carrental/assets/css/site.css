@@ -354,35 +354,42 @@ body {
     font-size: 1rem;
 }
 
-/* Location Section */
-.index-location {
-    background-color: #fff;
-    padding: 60px 0;
-}
 
-.location-container {
+
+.location-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
+    padding: 40px 20px;
+    background-color: #fff;
 }
 
-.map-container {
+.map-section {
     width: 100%;
     max-width: 800px;
-    height: 300px;
-    border-radius: 8px;
-    overflow: hidden;
+    text-align: center;
 }
 
-.location-details {
-    text-align: center;
-    max-width: 800px;
+.map-container iframe {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+}
+
+.details-section {
+    width: 100%;
+    max-width: 600px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .location-details h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 15px;
+    color: #333;
 }
 
 .location-details p {
@@ -410,17 +417,33 @@ body {
 .service-icons {
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
 .service-icons span {
     font-size: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .service-icons span i {
     margin-right: 5px;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .map-section,
+    .details-section {
+        max-width: 100%;
+    }
+
+    .service-icons {
+        justify-content: center;
+    }
+}
+
+
 
 /* About Us Section */
 .index-about {
@@ -446,9 +469,9 @@ body {
     padding: 10px 20px;
     background-color: #ff5722;
     color: white;
-
     text-decoration: none;
     border-radius: 5px;
+   
 }
 
 .index-about .btn:hover {
@@ -845,4 +868,130 @@ body {
 .car-info:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     transform: translateY(-5px);
+}
+
+
+
+/* Contact Us Page Styles */
+.contact-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.contact-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.contact-subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.btn-submit {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .contact-container {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .contact-title {
+        font-size: 1.8rem;
+    }
+
+    .contact-subtitle {
+        font-size: 1rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 0.9rem;
+    }
+
+    .btn-submit {
+        font-size: 1rem;
+        padding: 10px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-title {
+        font-size: 1.5rem;
+    }
+
+    .contact-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 0.85rem;
+    }
+
+    .btn-submit {
+        font-size: 0.95rem;
+        padding: 8px 16px;
+    }
 }
