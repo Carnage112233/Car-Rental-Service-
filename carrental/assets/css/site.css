@@ -930,7 +930,7 @@ body {
     padding: 12px 20px;
     font-size: 1.1rem;
     font-weight: bold;
-    background-color: #007bff;
+    background-color: #ff7b00;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -939,7 +939,7 @@ body {
 }
 
 .btn-submit:hover {
-    background-color: #0056b3;
+    background-color: #ff7b00;
 }
 
 /* Responsive Styles */

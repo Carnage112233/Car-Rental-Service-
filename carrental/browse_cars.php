@@ -3,15 +3,12 @@
 
 <main class="car-list-main">
     <div class="car-list-container">
-        <!-- Filter Sidebar -->
         <section class="filter-sidebar">
             <h3>Filter Cars</h3>
             <form method="GET" action="">
-                <!-- Filter by Car Name -->
                 <label for="name">Car Name:</label>
                 <input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>" placeholder="Search by name">
 
-                <!-- Filter by Car Type -->
                 <label for="car_type">Car Type:</label>
                 <select id="car_type" name="car_type">
                     <option value="">All Types</option>
@@ -21,7 +18,6 @@
                     <option value="Convertible" <?php echo isset($_GET['car_type']) && $_GET['car_type'] == 'Convertible' ? 'selected' : ''; ?>>Convertible</option>
                 </select>
 
-                <!-- Filter by Transmission -->
                 <label for="transmission">Transmission:</label>
                 <select id="transmission" name="transmission">
                     <option value="">All Transmissions</option>
@@ -112,20 +108,18 @@
 
                     if ($cars) {
                         foreach ($cars as $car) {
-                            // Convert image blob to base64 or use a default image
                             $image = $car['image_data'] ? 'data:image/jpeg;base64,' . base64_encode($car['image_data']) : 'car_images/default.jpg';
 
-                            // Generate a clickable link to the car details page
                             echo "<div class='car-card-list'>
-                                    <a href='car_details.php?car_id={$car['car_id']}'>
-                                        <img src='$image' alt='{$car['name']}'>
-                                    </a>
-                                    <div class='car-info'>
-                                        <h2><a href='car_details.php?car_id={$car['car_id']}'>{$car['name']}</a></h2>
-                                        <p><strong>Year:</strong> {$car['model_year']}</p>
-                                        <p><strong>Price Per Day:</strong> $ {$car['price_per_day']}</p>
-                                    </div>
-                                  </div>";
+                            <a href='car_details.php?car_id={$car['car_id']}'>
+                                <img src='$image' alt='{$car['name']}'>
+                            </a>
+                            <div class='car-info'>
+                                <h2>{$car['name']}</h2>
+                                <p><strong>Year:</strong> {$car['model_year']}</p>
+                                <p><strong>Price Per Day:</strong> $ {$car['price_per_day']}</p>
+                            </div>
+                        </div>";
                         }
                     } else {
                         echo "<p>No cars available</p>";
