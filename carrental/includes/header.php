@@ -41,7 +41,7 @@ if (isset($_SESSION['id'])) {
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="./assets/images/carlogo.jpg" alt="Car Rental" style="width: 50px; height: 50px; object-fit: contain;">
+                <img src="./assets/images/DriveEase.png" alt="Car Rental">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

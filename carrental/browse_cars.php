@@ -25,19 +25,21 @@
                     <option value="Automatic" <?php echo isset($_GET['transmission']) && $_GET['transmission'] == 'Automatic' ? 'selected' : ''; ?>>Automatic</option>
                 </select>
 
-                <!-- Filter by Availability (Date Range) -->
-                <label for="availability_start">Availability Start:</label>
-                <input type="date" id="availability_start" name="availability_start" value="<?php echo isset($_GET['availability_start']) ? $_GET['availability_start'] : ''; ?>">
-
-                <label for="availability_end">Availability End:</label>
-                <input type="date" id="availability_end" name="availability_end" value="<?php echo isset($_GET['availability_end']) ? $_GET['availability_end'] : ''; ?>">
-
                 <!-- Filter Button -->
-                <button type="submit" class="filter-button">Apply Filter</button>
+                <button type="submit" class="filter-button" name="apply_filter" value="true">Apply Filter</button>
 
                 <!-- Clear Filter Button -->
                 <a href="browse_cars.php" class="clear-filter-button">Clear Filter</a>
             </form>
+
+            <!-- Display error message after clicking Apply Filter, if no filters are selected -->
+            <?php
+            if (isset($_GET['apply_filter']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
+                if (empty($_GET['name']) && empty($_GET['car_type']) && empty($_GET['transmission'])) {
+                    echo "<p class='error-message' style='color: red;'>Please select at least one filter option.</p>";
+                }
+            }
+            ?>
         </section>
 
         <!-- Car List -->
@@ -49,8 +51,6 @@
                 $name = isset($_GET['name']) ? $_GET['name'] : '';
                 $car_type = isset($_GET['car_type']) ? $_GET['car_type'] : '';
                 $transmission = isset($_GET['transmission']) ? $_GET['transmission'] : '';
-                $availability_start = isset($_GET['availability_start']) ? $_GET['availability_start'] : '';
-                $availability_end = isset($_GET['availability_end']) ? $_GET['availability_end'] : '';
 
                 try {
                     // Base query to fetch available cars
@@ -69,17 +69,6 @@
                     if ($transmission) {
                         $conditions[] = "c.transmission = :transmission";
                     }
-                    if ($availability_start && $availability_end) {
-                        $conditions[] = "(NOT EXISTS (
-                                            SELECT 1 FROM bookings b 
-                                            WHERE b.car_id = c.car_id 
-                                            AND (
-                                                (b.start_date BETWEEN :availability_start AND :availability_end)
-                                                OR (b.end_date BETWEEN :availability_start AND :availability_end)
-                                                OR (b.start_date <= :availability_start AND b.end_date >= :availability_end) 
-                                            )
-                                        ))";
-                    }
 
                     // Append conditions to query
                     if (count($conditions) > 0) {
@@ -97,10 +86,6 @@
                     }
                     if ($transmission) {
                         $stmt->bindValue(':transmission', $transmission);
-                    }
-                    if ($availability_start && $availability_end) {
-                        $stmt->bindValue(':availability_start', $availability_start);
-                        $stmt->bindValue(':availability_end', $availability_end);
                     }
 
                     $stmt->execute();
