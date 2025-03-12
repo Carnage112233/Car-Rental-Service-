@@ -55,7 +55,7 @@
                 try {
                     // Base query to fetch available cars
                     $query = "SELECT c.car_id, c.name, c.model_year, c.price_per_day, 
-                                     (SELECT image_data FROM car_images WHERE car_id = c.car_id LIMIT 1) AS image_data
+                                 (SELECT image_data FROM car_images WHERE car_id = c.car_id LIMIT 1) AS image_data
                               FROM cars c WHERE c.availability = 'available'";
 
                     // Apply filters dynamically
@@ -95,16 +95,17 @@
                         foreach ($cars as $car) {
                             $image = $car['image_data'] ? 'data:image/jpeg;base64,' . base64_encode($car['image_data']) : 'car_images/default.jpg';
 
+                            // Display the car information
                             echo "<div class='car-card-list'>
-                            <a href='car_details.php?car_id={$car['car_id']}'>
-                                <img src='$image' alt='{$car['name']}'>
-                            </a>
-                            <div class='car-info'>
-                                <h2>{$car['name']}</h2>
-                                <p><strong>Year:</strong> {$car['model_year']}</p>
-                                <p><strong>Price Per Day:</strong> $ {$car['price_per_day']}</p>
-                            </div>
-                        </div>";
+                                <a href='car_details.php?car_id={$car['car_id']}'>
+                                    <img src='$image' alt='{$car['name']}'>
+                                </a>
+                                <div class='car-info'>
+                                    <h2>{$car['name']}</h2>
+                                    <p><i class='fa fa-calendar'></i> <strong>Year:</strong> {$car['model_year']}</p>
+                                    <p><i class='fa fa-dollar-sign'></i> <strong>Price Per Day:</strong> $ {$car['price_per_day']}</p>
+                                 </div>
+                            </div>";
                         }
                     } else {
                         echo "<p>No cars available</p>";

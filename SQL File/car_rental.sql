@@ -38,9 +38,17 @@ ALTER TABLE cars
 ADD COLUMN car_type ENUM('SUV', 'Sedan', 'Sport', 'Convertible') NOT NULL
 AFTER brand;
 
+CREATE TABLE car_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    car_id INT,
+    image_data LONGBLOB,
+    FOREIGN KEY (car_id) REFERENCES cars(car_id) ON DELETE CASCADE
+);
+
 -- Bookings Table
 CREATE TABLE bookings (
     booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_reference VARCHAR(20) UNIQUE NOT NULL, -- Unique Booking ID for invoices
     user_id INT NOT NULL, -- Customer who made the booking
     car_id INT NOT NULL, -- Car being booked
     start_date DATE NOT NULL,
@@ -53,6 +61,7 @@ CREATE TABLE bookings (
     FOREIGN KEY (car_id) REFERENCES cars(car_id) ON DELETE CASCADE,
     FOREIGN KEY (updated_by_admin) REFERENCES users(id) ON DELETE SET NULL
 );
+
 
 -- Payments Table
 CREATE TABLE payments (
@@ -78,9 +87,4 @@ CREATE TABLE admin_logs (
     FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE car_images (
-    image_id INT AUTO_INCREMENT PRIMARY KEY,
-    car_id INT,
-    image_data LONGBLOB,
-    FOREIGN KEY (car_id) REFERENCES cars(car_id) ON DELETE CASCADE
-);
+
