@@ -25,14 +25,11 @@
                     <option value="Automatic" <?php echo isset($_GET['transmission']) && $_GET['transmission'] == 'Automatic' ? 'selected' : ''; ?>>Automatic</option>
                 </select>
 
-                <!-- Filter Button -->
                 <button type="submit" class="filter-button" name="apply_filter" value="true">Apply Filter</button>
 
-                <!-- Clear Filter Button -->
                 <a href="browse_cars.php" class="clear-filter-button">Clear Filter</a>
             </form>
 
-            <!-- Display error message after clicking Apply Filter, if no filters are selected -->
             <?php
             if (isset($_GET['apply_filter']) && $_SERVER['REQUEST_METHOD'] == 'GET') {
                 if (empty($_GET['name']) && empty($_GET['car_type']) && empty($_GET['transmission'])) {
@@ -42,23 +39,19 @@
             ?>
         </section>
 
-        <!-- Car List -->
         <section class="car-list">
             <h1>Available Cars</h1>
             <div class="car-card-list-container">
                 <?php
-                // Get filter parameters from the URL
                 $name = isset($_GET['name']) ? $_GET['name'] : '';
                 $car_type = isset($_GET['car_type']) ? $_GET['car_type'] : '';
                 $transmission = isset($_GET['transmission']) ? $_GET['transmission'] : '';
 
                 try {
-                    // Base query to fetch available cars
                     $query = "SELECT c.car_id, c.name, c.model_year, c.price_per_day, 
                                  (SELECT image_data FROM car_images WHERE car_id = c.car_id LIMIT 1) AS image_data
                               FROM cars c WHERE c.availability = 'available'";
 
-                    // Apply filters dynamically
                     $conditions = [];
                     if ($name) {
                         $conditions[] = "c.name LIKE :name";
@@ -70,14 +63,12 @@
                         $conditions[] = "c.transmission = :transmission";
                     }
 
-                    // Append conditions to query
                     if (count($conditions) > 0) {
                         $query .= " AND " . implode(' AND ', $conditions);
                     }
 
                     $stmt = $pdo->prepare($query);
 
-                    // Bind parameters for dynamic filters
                     if ($name) {
                         $stmt->bindValue(':name', '%' . $name . '%');
                     }
@@ -95,7 +86,6 @@
                         foreach ($cars as $car) {
                             $image = $car['image_data'] ? 'data:image/jpeg;base64,' . base64_encode($car['image_data']) : 'car_images/default.jpg';
 
-                            // Display the car information
                             echo "<div class='car-card-list'>
                                 <a href='car_details.php?car_id={$car['car_id']}'>
                                     <img src='$image' alt='{$car['name']}'>
