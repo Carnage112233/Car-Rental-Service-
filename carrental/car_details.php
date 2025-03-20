@@ -137,8 +137,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const bookedDates = <?php echo json_encode($bookedDates); ?>;
-
-        // Disable dates on the calendar
+        
         function disableBookedDates(date) {
             const formattedDate = date.toISOString().split('T')[0];
 
@@ -147,15 +146,37 @@
                 const endDate = bookedDates[i].end_date;
 
                 if (formattedDate >= startDate && formattedDate <= endDate) {
-                    return [false]; // Disable this date
+                    return [false]; // Disable booked dates
                 }
             }
 
-            return [true]; // Allow this date
+            return [true]; // Enable other dates
         }
 
         const startDateInput = document.getElementById('start_date');
         const endDateInput = document.getElementById('end_date');
+
+        // Prevent past dates
+        const today = new Date().toISOString().split('T')[0];
+        startDateInput.setAttribute('min', today);
+        endDateInput.setAttribute('min', today);
+
+        startDateInput.addEventListener('change', function () {
+            const selectedStartDate = new Date(this.value);
+            endDateInput.setAttribute('min', this.value); // Ensure end date is after start date
+
+            // Reset end date if it's before start date
+            if (endDateInput.value && new Date(endDateInput.value) < selectedStartDate) {
+                endDateInput.value = '';
+            }
+        });
+
+        endDateInput.addEventListener('change', function () {
+            if (new Date(this.value) < new Date(startDateInput.value)) {
+                alert("End date must be after the start date.");
+                this.value = '';
+            }
+        });
 
         $(startDateInput).datepicker({
             beforeShowDay: disableBookedDates
