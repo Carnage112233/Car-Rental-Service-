@@ -105,7 +105,7 @@
 
 
 
-    <section class="about index-about" id="about"> 
+    <section class="about index-about text-center" id="about"> 
         <div class="container">
             <h2>About Us</h2>
             <p>We are a leading car rental service provider with over 10 years of experience. Our mission is to offer the best vehicles and customer service to make your journey unforgettable.</p>
