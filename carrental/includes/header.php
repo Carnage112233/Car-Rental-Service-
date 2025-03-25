@@ -52,8 +52,8 @@ if (isset($_SESSION['id'])) {
                     <a class="nav-link <?= $current_page == 'index.php' ? 'active' : '' ?>" href="index.php">Home</a>
                     <a class="nav-link <?= $current_page == 'browse_cars.php' ? 'active' : '' ?>"
                         href="browse_cars.php">Browse Cars</a>
-                    <a class="nav-link <?= $current_page == 'contact.php' ? 'active' : '' ?>" href="contact.php">Contact
-                        Us</a>
+                    <a class="nav-link <?= $current_page == 'contact.php' ? 'active' : '' ?>" href="contact.php">Contact Us</a>
+                    <a class="nav-link <?= $current_page == 'about_us.php' ? 'active' : '' ?>" href="about_us.php">About Us</a>
 
                     <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']): ?>
                         <!-- Profile Dropdown -->
