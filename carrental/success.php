@@ -27,11 +27,14 @@
 <body class="bg-light">
     <div class="container">
         <div class="card text-center p-4">
-            <?php if (isset($_GET['payment_intent'])): ?>
+            <?php 
+            if (isset($_GET['payment_intent']) && preg_match('/^[a-zA-Z0-9_]+$/', $_GET['payment_intent'])): 
+                $payment_intent = htmlspecialchars($_GET['payment_intent']);
+            ?>
                 <div class="text-success success-icon">&#10004;</div>
                 <h2 class="text-success">Payment Successful!</h2>
                 <p class="fw-bold">Your payment has been processed successfully.</p>
-                <p><strong>Payment Intent ID:</strong> <?= htmlspecialchars($_GET['payment_intent']); ?></p>
+                <p><strong>Payment Intent ID:</strong> <?= $payment_intent; ?></p>
                 <a href="index.php" class="btn btn-primary mt-3">Return to Home</a>
             <?php else: ?>
                 <div class="text-danger error-icon">&#10006;</div>

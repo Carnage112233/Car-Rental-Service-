@@ -2,10 +2,17 @@
 include 'includes/db_connection.php';
 include 'includes/header.php';
 
-// Ensure session is started only if it's not already active
+// Ensure session is started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Check if user_id is set in session
+if (!isset($_SESSION['id'])) {
+    die("User is not logged in.");
+}
+
+$user_id = $_SESSION['id']; // Now it's safe to use this value
 
 // Get booking details from URL parameters
 if (isset($_GET['car_id'], $_GET['start_date'], $_GET['end_date'], $_GET['booking_ref'], $_GET['total_amount'])) {
@@ -33,6 +40,19 @@ if (isset($_GET['car_id'], $_GET['start_date'], $_GET['end_date'], $_GET['bookin
             ]
         ]);
         $clientSecret = $paymentIntent->client_secret;
+
+        // Insert the booking details into the database
+        $stmt = $pdo->prepare("INSERT INTO bookings (booking_reference, user_id, car_id, start_date, end_date, total_price) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$booking_ref, $user_id, $car_id, $start_date, $end_date, $total_amount]);
+
+        // Get the inserted booking_id
+        $booking_id = $pdo->lastInsertId();
+
+        // Insert payment details into the database
+        $payment_method = 'credit_card'; // You can dynamically set this based on the payment method used
+        $stmt = $pdo->prepare("INSERT INTO payments (booking_id, user_id, amount, payment_method, payment_status) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$booking_id, $user_id, $total_amount, $payment_method, 'confirmed']);
+
     } catch (\Stripe\Exception\ApiErrorException $e) {
         die("Stripe Error: " . $e->getMessage());
     }
@@ -48,7 +68,6 @@ if (isset($_GET['car_id'], $_GET['start_date'], $_GET['end_date'], $_GET['bookin
                 <div class="card shadow p-4">
                     <h4 class="text-center">Booking Summary</h4>
                     <p><strong>Booking Reference:</strong> <?= $booking_ref ?></p>
-                    <p><strong>Car ID:</strong> <?= htmlspecialchars($car_id) ?></p>
                     <p><strong>Start Date:</strong> <?= htmlspecialchars($start_date) ?></p>
                     <p><strong>End Date:</strong> <?= htmlspecialchars($end_date) ?></p>
                     <h3><strong>Total Amount:</strong> $ <?= number_format($total_amount, 2) ?></h3>
