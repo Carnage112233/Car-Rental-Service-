@@ -16,10 +16,9 @@ $user_id = $_SESSION['id']; // Safe to use this value
 
 // Fetch bookings for the logged-in user with booking status using PDO prepared statements
 try {
-    // Prepare the query to fetch booking details and associated payment status
-    $stmt = $pdo->prepare("SELECT b.booking_reference, b.start_date, b.end_date, b.total_price, p.payment_status
+    // Prepare the query to fetch booking details
+    $stmt = $pdo->prepare("SELECT b.booking_reference, b.start_date, b.end_date, b.total_price, b.status AS booking_status
                            FROM bookings b
-                           JOIN payments p ON b.booking_id = p.booking_id
                            WHERE b.user_id = :user_id");
     // Bind the user ID to the prepared statement
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
@@ -58,11 +57,13 @@ try {
                     <td>$ <?= number_format($booking['total_price'], 2) ?></td>
                     <td>
                         <?php
-                        // Display the status with color tags
-                        if ($booking['payment_status'] == 'confirmed') {
+                        // Display the booking status with color tags
+                        if ($booking['booking_status'] == 'confirmed') {
                             echo '<span class="badge bg-success">Confirmed</span>';
+                        } elseif ($booking['booking_status'] == 'pending') {
+                            echo '<span class="badge bg-warning">Pending</span>';
                         } else {
-                            echo '<span class="badge bg-danger">Pending</span>';
+                            echo '<span class="badge bg-danger">Canceled</span>';
                         }
                         ?>
                     </td>

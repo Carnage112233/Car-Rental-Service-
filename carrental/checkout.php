@@ -49,9 +49,11 @@ if (isset($_GET['car_id'], $_GET['start_date'], $_GET['end_date'], $_GET['bookin
         $booking_id = $pdo->lastInsertId();
 
         // Insert payment details into the database
-        $payment_method = 'credit_card'; // You can dynamically set this based on the payment method used
+        // Insert payment details into the database (Fix: Initially set 'pending')
+        $payment_method = 'credit_card';
         $stmt = $pdo->prepare("INSERT INTO payments (booking_id, user_id, amount, payment_method, payment_status) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([$booking_id, $user_id, $total_amount, $payment_method, 'confirmed']);
+        $stmt->execute([$booking_id, $user_id, $total_amount, $payment_method, 'pending']); // Set 'pending'
+
 
     } catch (\Stripe\Exception\ApiErrorException $e) {
         die("Stripe Error: " . $e->getMessage());
@@ -97,19 +99,37 @@ if (isset($_GET['car_id'], $_GET['start_date'], $_GET['end_date'], $_GET['bookin
 
     const form = document.getElementById("payment-form");
     form.addEventListener("submit", async (event) => {
-        event.preventDefault();
+    event.preventDefault();
 
-        const { paymentIntent, error } = await stripe.confirmCardPayment("<?= $clientSecret ?>", {
-            payment_method: { card: cardElement }
+    const { paymentIntent, error } = await stripe.confirmCardPayment("<?= $clientSecret ?>", {
+        payment_method: { card: cardElement }
+    });
+
+    if (error) {
+        document.getElementById("payment-message").textContent = error.message;
+        
+        // Update payment status to 'failed' in the database
+        fetch("update_payment_status.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ booking_id: "<?= $booking_id ?>", status: "failed" })
         });
 
-        if (error) {
-            document.getElementById("payment-message").textContent = error.message;
-        } else {
-            document.getElementById("payment-message").textContent = "Payment successful!";
-            window.location.href = "success.php?payment_intent=" + paymentIntent.id;
-        }
-    });
+    } else {
+        document.getElementById("payment-message").textContent = "Payment successful!";
+        
+        // Update payment status to 'completed' in the database
+        fetch("update_payment_status.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ booking_id: "<?= $booking_id ?>", status: "completed" })
+        });
+
+        // Redirect to success page
+        window.location.href = "success.php?payment_intent=" + paymentIntent.id;
+    }
+});
+
 </script>
 
 <?php include 'includes/footer.php'; ?>

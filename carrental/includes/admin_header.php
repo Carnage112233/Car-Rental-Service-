@@ -19,7 +19,7 @@
     <a href="admin_dashboard.php?section=card_management">Card Management</a>
     <a href="Car_listing.php?section=Car_listing">Car Listing</a>
     <a href="user_list.php?section=user_list">User Management</a>
-    <a href="#">User Car Request</a>
+    <a href="car_request.php?section=car_request">User Car Request</a>
     <a href="../logout.php">Logout</a>
 </div>
 <div class="content">

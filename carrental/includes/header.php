@@ -4,7 +4,7 @@ require 'includes/db_connection.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-$public_pages = ['index.php', 'about.php', 'contact.php', 'browse_cars.php', 'car_details.php'];
+$public_pages = ['index.php', 'about.php', 'contact.php', 'browse_cars.php', 'car_details.php', 'about_us.php'];
 
 if (!isset($_SESSION['loggedin']) && !in_array($current_page, $public_pages)) {
     header('Location: login.php');
