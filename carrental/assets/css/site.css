@@ -1007,3 +1007,6 @@ body {
     border-color: #e64a19;
 }
 
+.about-us-main, .about-text {
+    font-family: 'Roboto', sans-serif; /* Same font as in index.php */
+}

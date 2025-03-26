@@ -28,19 +28,19 @@
                     <img src="../carrental/assets/images/browse car1.jpg" alt="Car 1">
                     <h3>Luxury Sedan</h3>
                     <p>Comfort and style for business or leisure.</p>
-                    <a href="./mainpage.php" class="btn">Book Now</a>
+                    <a href="browse_cars.php" class="btn">Book Now</a>
                 </div>
                 <div class="car-card">
                     <img src="../carrental/assets/images/browse car3.jpg" alt="Car 2">
                     <h3>SUV</h3>
                     <p>Perfect for family trips and off-road adventures.</p>
-                    <a href="./mainpage.php" class="btn">Book Now</a>
+                    <a href="browse_cars.php" class="btn">Book Now</a>
                 </div>
                 <div class="car-card">
                     <img src="../carrental/assets/images/browse car2.jpg" alt="Car 3">
                     <h3>Sports Car</h3>
                     <p>Experience speed and performance like never before.</p>
-                    <a href="./mainpage.php" class="btn">Book Now</a>
+                    <a href="browse_cars.php" class="btn">Book Now</a>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@
         <div class="container">
             <h2>About Us</h2>
             <p>We are a leading car rental service provider with over 10 years of experience. Our mission is to offer the best vehicles and customer service to make your journey unforgettable.</p>
-            <a href="#contact" class="btn">Learn More</a>
+            <a href="about_us.php" class="btn">Learn More</a>
         </div>
     </section>
 

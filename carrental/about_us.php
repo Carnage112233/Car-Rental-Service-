@@ -45,15 +45,7 @@
             </div>
         </div>
 
-        <div class="row text-center">
-            <div class="col-12">
-                <h3>Our Team</h3>
-                <p data-aos="fade-up">We are a dedicated team of professionals who share the same goal - to provide you with the best car rental experience possible. Our team is always here to assist you in finding the perfect vehicle and answering any questions you may have.</p>
-            </div>
-        </div>
-
-
-        <div class="row text-center">
+        <div class="row text-center mb-5">
             <div class="col-12">
                 <h3>Contact Us</h3>
                 <p>If you have any questions or need assistance, feel free to contact us anytime. We are here to help!</p>
@@ -65,4 +57,3 @@
 </main>
 
 <?php include 'includes/footer.php'; ?>
-

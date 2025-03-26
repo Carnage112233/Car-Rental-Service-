@@ -4,9 +4,9 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="browse_cars">Browse Car</a></li>
-                    <li><a href="#about">About Us</a></li>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="browse_cars.php">Browse Car</a></li>
+                    <li><a href="about_us.php">About Us</a></li>
                     <li><a href="contact.php">Contact</a></li>
                 </ul>
             </div>
