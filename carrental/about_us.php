@@ -52,35 +52,6 @@
             </div>
         </div>
 
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card shadow-lg p-4" data-aos="fade-up" data-aos-delay="400">
-                    <img src="team_member_1.jpg" alt="Team Member 1" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">John Doe</h5>
-                        <p class="card-text">CEO & Founder</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-lg p-4" data-aos="fade-up" data-aos-delay="500">
-                    <img src="team_member_2.jpg" alt="Team Member 2" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Jane Smith</h5>
-                        <p class="card-text">Operations Manager</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-lg p-4" data-aos="fade-up" data-aos-delay="600">
-                    <img src="team_member_3.jpg" alt="Team Member 3" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">Michael Johnson</h5>
-                        <p class="card-text">Customer Support Lead</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="row text-center">
             <div class="col-12">

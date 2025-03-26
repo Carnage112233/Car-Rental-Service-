@@ -29,7 +29,7 @@ $users = $stmt->fetchAll();  // Use fetchAll() for fetching the results
                     <td><?= htmlspecialchars($user['email']); ?></td>
                     <td>
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#userModal" data-user-id="<?= $user['id']; ?>">View</button> | 
-                        <a href="booking_history.php?id=<?= $user['id']; ?>" class="btn btn-primary btn-sm">Booking History</a>
+                        <a href="user_booking.php?id=<?= $user['id']; ?>" class="btn btn-primary btn-sm">Booking History</a>
                     </td>
                 </tr>
             <?php } ?>
@@ -50,7 +50,6 @@ $users = $stmt->fetchAll();  // Use fetchAll() for fetching the results
             </div>
             <div class="modal-body">
                 <div id="userDetails">
-                    <!-- User details will be dynamically loaded here -->
                 </div>
             </div>
         </div>

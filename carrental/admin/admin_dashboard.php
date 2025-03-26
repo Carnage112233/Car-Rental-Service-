@@ -63,7 +63,7 @@
                     Total Bookings: <?php echo $totalBookings; ?>
                 </div>
                 <div class="card-body">
-                    <a href="manage_bookings.php" class="btn btn-light">Go to Bookings</a>
+                    <a href="car_request.php" class="btn btn-light">Go to Bookings</a>
                 </div>
             </div>
         </div>

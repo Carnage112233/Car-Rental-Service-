@@ -70,7 +70,7 @@ CREATE TABLE payments (
     user_id INT NOT NULL, -- The customer making the payment
     amount DECIMAL(10, 2) NOT NULL, -- The total amount paid
     payment_method ENUM('credit_card', 'debit_card') NOT NULL, -- Payment method used
-    payment_status ENUM('pending', 'completed', 'failed',) DEFAULT 'pending', -- Status of payment
+    payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending', -- Status of payment
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Date and time of payment
     FOREIGN KEY (booking_id) REFERENCES bookings(booking_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
