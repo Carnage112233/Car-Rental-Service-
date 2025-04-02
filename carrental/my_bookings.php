@@ -1,6 +1,7 @@
 <?php
 include 'includes/db_connection.php';
 include 'includes/header.php';
+require(__DIR__ . '/fpdf186/fpdf.php'); 
 
 // Ensure session is started
 if (session_status() === PHP_SESSION_NONE) {
@@ -46,6 +47,7 @@ try {
                     <th>End Date</th>
                     <th>Total Price</th>
                     <th>Status</th>
+                    <th>Invoice</th> <!-- New column for Invoice -->
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +69,15 @@ try {
                         }
                         ?>
                     </td>
+                    <td>
+                        <?php if ($booking['booking_status'] == 'confirmed'): ?>
+                            <a href="generate_invoice.php?booking_reference=<?= urlencode($booking['booking_reference']) ?>" class="btn btn-primary btn-sm">
+                                Download Invoice
+                            </a>
+                        <?php else: ?>
+                            <span class="text-muted">Not Available</span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -76,5 +87,6 @@ try {
         <?php endif; ?>
     </div>
 </main>
+
 
 <?php include 'includes/footer.php'; ?>

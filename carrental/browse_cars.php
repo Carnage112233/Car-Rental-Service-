@@ -6,8 +6,15 @@
         <section class="filter-sidebar">
             <h3>Filter Cars</h3>
             <form method="GET" action="">
+
+                <!-- Voice Search Enabled Car Name Field -->
                 <label for="name">Car Name:</label>
-                <input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>" placeholder="Search by name">
+                <div class="voice-search-container">
+                    <input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>" placeholder="Search by name">
+                    <button type="button" id="voice-search-btn">
+                        <i class="fa fa-microphone"></i>
+                    </button>
+                </div>
 
                 <label for="car_type">Car Type:</label>
                 <select id="car_type" name="car_type">
@@ -110,3 +117,62 @@
 </main>
 
 <?php include 'includes/footer.php'; ?>
+
+<!-- JavaScript for Voice Search -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const voiceSearchBtn = document.getElementById("voice-search-btn");
+    const searchInput = document.getElementById("name");
+
+    if ("webkitSpeechRecognition" in window) {
+        let recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+
+        voiceSearchBtn.addEventListener("click", function () {
+            recognition.start();
+        });
+
+        recognition.onresult = function (event) {
+            const speechResult = event.results[0][0].transcript;
+            searchInput.value = speechResult;
+
+            // Auto-submit form when voice input is captured
+            document.querySelector("form").submit();
+        };
+
+        recognition.onerror = function (event) {
+            console.error("Speech recognition error", event);
+        };
+    } else {
+        voiceSearchBtn.disabled = true;
+        voiceSearchBtn.title = "Voice search is not supported in this browser.";
+    }
+});
+</script>
+
+<!-- CSS Styling for Voice Search -->
+<style>
+.voice-search-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#voice-search-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#voice-search-btn:hover {
+    background: #0056b3;
+}
+
+#voice-search-btn i {
+    font-size: 16px;
+}
+</style>
