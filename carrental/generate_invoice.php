@@ -42,17 +42,13 @@ try {
 $pdf = new FPDF();
 $pdf->AddPage();
 
-// Calculate the X position for centering the logo
-$logo_width = 40; // Adjust width of the logo
-$page_width = $pdf->GetPageWidth(); // Get page width
-$logo_x = ($page_width - $logo_width) / 2; // Calculate X position to center the logo
+$logo_width = 40; 
+$page_width = $pdf->GetPageWidth(); 
+$logo_x = ($page_width - $logo_width) / 2; 
 
-// Place the logo at the top
 $pdf->Image('assets/images/DriveEasee.png', $logo_x, 10, $logo_width); 
 
-// Add space after the logo
-$pdf->Ln(30);  // Increase the vertical space after the logo (you can adjust this value)
-
+$pdf->Ln(30);  
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->Cell(190, 10, "Booking Invoice", 0, 1, 'C');
 $pdf->Ln(10);

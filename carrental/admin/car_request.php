@@ -2,7 +2,6 @@
 include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
-// Fetch car requests (bookings) with car details, user information, and payment status
 $query = "
     SELECT 
         b.booking_reference,  
