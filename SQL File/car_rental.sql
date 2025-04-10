@@ -62,6 +62,9 @@ CREATE TABLE bookings (
     FOREIGN KEY (updated_by_admin) REFERENCES users(id) ON DELETE SET NULL
 );
 
+ALTER TABLE bookings
+MODIFY COLUMN start_date DATETIME NOT NULL,
+MODIFY COLUMN end_date DATETIME NOT NULL;
 
 -- Payments Table
 CREATE TABLE payments (
@@ -87,4 +90,12 @@ CREATE TABLE admin_logs (
     FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE TABLE cars_maintenance (
+    maintenance_id INT AUTO_INCREMENT PRIMARY KEY,
+    car_id INT NOT NULL,
+    maintenance_type ENUM('Oil Change', 'Tire Change', 'Brake Inspection', 'Engine Check', 'Transmission Check', 'Battery Check', 'General Service') NOT NULL,
+	maintenance_start_date DATE NOT NULL,
+	maintenance_end_date DATE NOT NULL,
+    FOREIGN KEY (car_id) REFERENCES cars(car_id) ON DELETE CASCADE
+);
 

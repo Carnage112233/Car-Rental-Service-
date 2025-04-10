@@ -54,8 +54,8 @@ try {
                 <?php foreach ($bookings as $booking): ?>
                 <tr>
                     <td><?= htmlspecialchars($booking['booking_reference']) ?></td>
-                    <td><?= htmlspecialchars($booking['start_date']) ?></td>
-                    <td><?= htmlspecialchars($booking['end_date']) ?></td>
+                    <td><?= date('Y-m-d h:i A', strtotime($booking['start_date'])) ?></td> <!-- Formatted start date with AM/PM -->
+                    <td><?= date('Y-m-d h:i A', strtotime($booking['end_date'])) ?></td> <!-- Formatted end date with AM/PM -->
                     <td>$ <?= number_format($booking['total_price'], 2) ?></td>
                     <td>
                         <?php
@@ -87,6 +87,5 @@ try {
         <?php endif; ?>
     </div>
 </main>
-
 
 <?php include 'includes/footer.php'; ?>
