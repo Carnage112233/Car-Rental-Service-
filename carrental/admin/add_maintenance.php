@@ -8,13 +8,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $car_id = $_POST['car_id'];
     $maintenance_type = $_POST['maintenance_type'];
     $start_date = $_POST['maintenance_start_date'];  
-    $end_date = $_POST['maintenance_end_date'];      
+    $end_date = $_POST['maintenance_end_date'];       
 
     // Validate fields
     if (empty($car_id) || empty($maintenance_type) || empty($start_date) || empty($end_date)) {
         $errors[] = "All fields are required.";
     } elseif ($start_date > $end_date) {
         $errors[] = "End date must be after start date.";
+    }
+
+    // Check for maintenance type on the same date
+    $stmt = $pdo->prepare("SELECT * FROM cars_maintenance WHERE car_id = :car_id AND maintenance_start_date = :start_date AND maintenance_type = :maintenance_type");
+    $stmt->execute([
+        ':car_id' => $car_id,
+        ':start_date' => $start_date,
+        ':maintenance_type' => $maintenance_type
+    ]);
+    $existingRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($existingRecord) {
+        $errors[] = "This maintenance type has already been scheduled for this car on the selected date.";
     }
 
     if (empty($errors)) {
@@ -44,11 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php
     if (!empty($errors)) {
-        echo '<ul class="errors">';
+        echo '<div class="alert alert-danger" role="alert">';
         foreach ($errors as $error) {
-            echo "<li>$error</li>";
+            echo "<p>$error</p>";
         }
-        echo '</ul>';
+        echo '</div>';
     }
 
     // Display success message
