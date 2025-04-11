@@ -32,14 +32,44 @@ try {
     die("Error fetching bookings: " . $e->getMessage());
 }
 
+// Initialize notification message
+$notification = '';
+$notification_class = '';
+$show_notification = false;
+
+// Check if a notification should be displayed (only show once)
+if ($bookings) {
+    foreach ($bookings as $booking) {
+        if ($booking['booking_status'] == 'confirmed' && !isset($_SESSION['notification_shown'])) {
+            $notification = 'Your booking has been confirmed! You can download your invoice.';
+            $notification_class = 'alert-success';  // Bootstrap success alert
+            $show_notification = true;
+            $_SESSION['notification_shown'] = true; // Set session variable to prevent showing again
+        } elseif ($booking['booking_status'] == 'canceled' && !isset($_SESSION['notification_shown'])) {
+            $notification = 'Your booking has been canceled.';
+            $notification_class = 'alert-danger';  // Bootstrap danger alert
+            $show_notification = true;
+            $_SESSION['notification_shown'] = true; // Set session variable to prevent showing again
+        }
+    }
+}
+
 ?>
 
 <main class="mybookings-main">
     <div class="container mybookings-container mt-5">
         <h2 class="text-center">My Bookings</h2>
 
+        <!-- Bootstrap Notification (only shows once) -->
+        <?php if ($show_notification && $notification): ?>
+            <div class="alert <?= $notification_class ?> alert-dismissible fade show" role="alert">
+                <strong>Notice:</strong> <?= $notification ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
         <?php if ($bookings): ?>
-        <table class="table table-striped mt-5"> <!-- Custom margin class -->
+        <table class="table table-striped mt-5">
             <thead>
                 <tr>
                     <th>Booking Reference</th>
@@ -47,15 +77,15 @@ try {
                     <th>End Date</th>
                     <th>Total Price</th>
                     <th>Status</th>
-                    <th>Invoice</th> <!-- New column for Invoice -->
+                    <th>Invoice</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($bookings as $booking): ?>
                 <tr>
                     <td><?= htmlspecialchars($booking['booking_reference']) ?></td>
-                    <td><?= date('Y-m-d h:i A', strtotime($booking['start_date'])) ?></td> <!-- Formatted start date with AM/PM -->
-                    <td><?= date('Y-m-d h:i A', strtotime($booking['end_date'])) ?></td> <!-- Formatted end date with AM/PM -->
+                    <td><?= date('Y-m-d h:i A', strtotime($booking['start_date'])) ?></td>
+                    <td><?= date('Y-m-d h:i A', strtotime($booking['end_date'])) ?></td>
                     <td>$ <?= number_format($booking['total_price'], 2) ?></td>
                     <td>
                         <?php
@@ -89,3 +119,7 @@ try {
 </main>
 
 <?php include 'includes/footer.php'; ?>
+
+<!-- Bootstrap JS and Popper.js (Make sure these are included in your project) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>

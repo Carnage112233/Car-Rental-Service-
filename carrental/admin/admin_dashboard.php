@@ -25,6 +25,13 @@
         $stmt->execute();
         $bookingData = $stmt->fetch(PDO::FETCH_ASSOC);
         $totalBookings = $bookingData['totalBookings'];
+
+        // Fetch total number of pending bookings
+        $pendingQuery = "SELECT COUNT(*) AS pendingBookings FROM bookings WHERE status = 'pending'";
+        $stmt = $pdo->prepare($pendingQuery);
+        $stmt->execute();
+        $pendingData = $stmt->fetch(PDO::FETCH_ASSOC);
+        $pendingBookings = $pendingData['pendingBookings'];
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
@@ -63,7 +70,15 @@
                     Total Bookings: <?php echo $totalBookings; ?>
                 </div>
                 <div class="card-body">
-                    <a href="car_request.php" class="btn btn-light">Go to Bookings</a>
+                    <a href="car_request.php" class="btn btn-light position-relative">
+                        Go to Bookings
+                        <?php if ($pendingBookings > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?php echo $pendingBookings; ?>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        <?php endif; ?>
+                    </a>
                 </div>
             </div>
         </div>

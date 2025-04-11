@@ -79,17 +79,6 @@ CREATE TABLE payments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Admin Logs Table
-CREATE TABLE admin_logs (
-    log_id INT AUTO_INCREMENT PRIMARY KEY,
-    admin_id INT NOT NULL, -- Refers to the admin performing the action
-    action VARCHAR(255) NOT NULL, -- Description of the action
-    table_name VARCHAR(50), -- Table affected (e.g., 'cars', 'bookings')
-    record_id INT, -- Affected record's ID
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
 CREATE TABLE cars_maintenance (
     maintenance_id INT AUTO_INCREMENT PRIMARY KEY,
     car_id INT NOT NULL,

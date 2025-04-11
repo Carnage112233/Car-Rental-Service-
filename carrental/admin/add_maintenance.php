@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
-            $sql = "INSERT INTO cars_maintenance (car_id, maintenance_type, maintenance_start_date, maintenance_end_date)  // Updated column names
+            $sql = "INSERT INTO cars_maintenance (car_id, maintenance_type, maintenance_start_date, maintenance_end_date)  
                     VALUES (:car_id, :maintenance_type, :maintenance_start_date, :maintenance_end_date)"; // Updated column names
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
