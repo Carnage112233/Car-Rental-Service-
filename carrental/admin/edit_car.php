@@ -1,8 +1,10 @@
 <?php
+session_start();
+
 include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
-session_start();
+
 
 if (!isset($_GET['id'])) {
     $_SESSION['error_message'] = "Invalid request.";

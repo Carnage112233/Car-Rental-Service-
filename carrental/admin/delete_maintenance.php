@@ -1,6 +1,8 @@
 <?php
-include '../includes/db_connection.php'; 
 session_start();
+
+include '../includes/db_connection.php'; 
+
 
 // Check if ID is set and valid
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {

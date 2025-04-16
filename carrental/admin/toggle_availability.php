@@ -1,6 +1,8 @@
 <?php
-include '../includes/db_connection.php'; // Include the PDO connection
 session_start();
+
+include '../includes/db_connection.php'; // Include the PDO connection
+
 
 if (!isset($_GET['id'])) {
     $_SESSION['error_message'] = "Invalid request.";
