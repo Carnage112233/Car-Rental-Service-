@@ -46,7 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':fuel_type' => htmlspecialchars($fuel_type),
                 ':transmission' => htmlspecialchars($transmission),
                 ':car_type' => htmlspecialchars($car_type),  // New field
-                ':added_by' => $admin_id
             ]);
 
             $car_id = $pdo->lastInsertId();
