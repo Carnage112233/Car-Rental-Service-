@@ -1,8 +1,10 @@
 <?php
+session_start(); 
+
 include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
-session_start();  
+ 
 
 if (isset($_SESSION['success_message'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
@@ -72,7 +74,6 @@ $result = $stmt->fetchAll();
         <?php } ?>
     </tbody>
 </table>
-
 </main>
 
 <?php include '../includes/admin_footer.php'; ?>

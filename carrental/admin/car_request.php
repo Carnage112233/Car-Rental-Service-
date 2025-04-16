@@ -1,9 +1,10 @@
 <?php
+session_start(); 
+
 include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
-// Start the session to store the notification message
-session_start();
+
 
 $query = "
     SELECT 

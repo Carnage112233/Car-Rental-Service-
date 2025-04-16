@@ -1,6 +1,7 @@
 <?php
-include '../includes/db_connection.php';
 session_start();
+
+include '../includes/db_connection.php';
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     $_SESSION['error_message'] = "Invalid request!";
