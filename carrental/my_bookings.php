@@ -3,64 +3,52 @@ include 'includes/db_connection.php';
 include 'includes/header.php';
 require(__DIR__ . '/fpdf186/fpdf.php'); 
 
-// Ensure session is started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user_id is set in session
 if (!isset($_SESSION['id'])) {
     die("User is not logged in.");
 }
 
-$user_id = $_SESSION['id']; // Safe to use this value
+$user_id = $_SESSION['id'];
 
-// Fetch bookings for the logged-in user with booking status using PDO prepared statements
 try {
-    // Prepare the query to fetch booking details
-    $stmt = $pdo->prepare("SELECT b.booking_reference, b.start_date, b.end_date, b.total_price, b.status AS booking_status
+    $stmt = $pdo->prepare("SELECT b.booking_id, b.booking_reference, b.start_date, b.end_date, b.total_price, b.status AS booking_status
                            FROM bookings b
                            WHERE b.user_id = :user_id");
-    // Bind the user ID to the prepared statement
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    // Execute the query
     $stmt->execute();
-    
-    // Fetch all results
     $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error fetching bookings: " . $e->getMessage());
 }
 
-// Initialize notification message
 $notification = '';
 $notification_class = '';
 $show_notification = false;
 
-// Check if a notification should be displayed (only show once)
 if ($bookings) {
     foreach ($bookings as $booking) {
         if ($booking['booking_status'] == 'confirmed' && !isset($_SESSION['notification_shown'])) {
             $notification = 'Your booking has been confirmed! You can download your invoice.';
-            $notification_class = 'alert-success';  // Bootstrap success alert
+            $notification_class = 'alert-success';
             $show_notification = true;
-            $_SESSION['notification_shown'] = true; // Set session variable to prevent showing again
+            $_SESSION['notification_shown'] = true;
         } elseif ($booking['booking_status'] == 'canceled' && !isset($_SESSION['notification_shown'])) {
             $notification = 'Your booking has been canceled.';
-            $notification_class = 'alert-danger';  // Bootstrap danger alert
+            $notification_class = 'alert-danger';
             $show_notification = true;
-            $_SESSION['notification_shown'] = true; // Set session variable to prevent showing again
+            $_SESSION['notification_shown'] = true;
         }
     }
 }
-
 ?>
 
 <main class="mybookings-main">
     <div class="container mybookings-container mt-5">
         <h2 class="text-center">My Bookings</h2>
 
-        <!-- Bootstrap Notification (only shows once) -->
         <?php if ($show_notification && $notification): ?>
             <div class="alert <?= $notification_class ?> alert-dismissible fade show" role="alert">
                 <strong>Notice:</strong> <?= $notification ?>
@@ -77,7 +65,7 @@ if ($bookings) {
                     <th>End Date</th>
                     <th>Total Price</th>
                     <th>Status</th>
-                    <th>Invoice</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -89,7 +77,6 @@ if ($bookings) {
                     <td>$ <?= number_format($booking['total_price'], 2) ?></td>
                     <td>
                         <?php
-                        // Display the booking status with color tags
                         if ($booking['booking_status'] == 'confirmed') {
                             echo '<span class="badge bg-success">Confirmed</span>';
                         } elseif ($booking['booking_status'] == 'pending') {
@@ -101,9 +88,14 @@ if ($bookings) {
                     </td>
                     <td>
                         <?php if ($booking['booking_status'] == 'confirmed'): ?>
-                            <a href="generate_invoice.php?booking_reference=<?= urlencode($booking['booking_reference']) ?>" class="btn btn-primary btn-sm">
+                            <a href="generate_invoice.php?booking_reference=<?= urlencode($booking['booking_reference']) ?>" class="btn btn-primary btn-sm mb-1">
                                 Download Invoice
                             </a>
+
+                            <form method="POST" action="cancel_booking.php" onsubmit="return confirm('Are you sure you want to cancel this booking?');" style="display:inline;">
+                                <input type="hidden" name="booking_id" value="<?= htmlspecialchars($booking['booking_id']) ?>">
+                                <input type="submit" class="btn btn-danger btn-sm" value="Cancel Booking">
+                            </form>
                         <?php else: ?>
                             <span class="text-muted">Not Available</span>
                         <?php endif; ?>
@@ -120,6 +112,5 @@ if ($bookings) {
 
 <?php include 'includes/footer.php'; ?>
 
-<!-- Bootstrap JS and Popper.js (Make sure these are included in your project) -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
