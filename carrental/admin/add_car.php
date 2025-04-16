@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         try {
             // Insert data into the database
-            $sql = "INSERT INTO cars (name, brand, model_year, price_per_day, seating_capacity, fuel_type, transmission, car_type, added_by) 
-                    VALUES (:name, :brand, :model_year, :price_per_day, :seating_capacity, :fuel_type, :transmission, :car_type, :added_by)";
+            $sql = "INSERT INTO cars (name, brand, model_year, price_per_day, seating_capacity, fuel_type, transmission, car_type) 
+                    VALUES (:name, :brand, :model_year, :price_per_day, :seating_capacity, :fuel_type, :transmission, :car_type)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 ':name' => htmlspecialchars($name),
