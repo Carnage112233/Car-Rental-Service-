@@ -4,8 +4,21 @@ session_start();
 include '../includes/db_connection.php'; // Include the PDO connection
 include '../includes/admin_header.php';  // Admin Header
 
+// Pagination Setup
+$records_per_page = 5;
+$current_page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+$offset = ($current_page - 1) * $records_per_page;
 
+// Get total number of records
+$count_query = "
+    SELECT COUNT(*) FROM bookings b 
+    WHERE b.status IN ('pending', 'confirmed', 'canceled')
+";
+$total_stmt = $pdo->query($count_query);
+$total_records = $total_stmt->fetchColumn();
+$total_pages = ceil($total_records / $records_per_page);
 
+// Main Query with LIMIT and OFFSET
 $query = "
     SELECT 
         b.booking_reference,  
@@ -28,8 +41,12 @@ $query = "
         payments p ON b.booking_id = p.booking_id
     WHERE 
         b.status IN ('pending', 'confirmed', 'canceled')
+    ORDER BY b.booking_id DESC
+    LIMIT :limit OFFSET :offset
 ";
 $stmt = $pdo->prepare($query);
+$stmt->bindValue(':limit', $records_per_page, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $carRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -59,14 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'], $_POST['
     $_SESSION['user_notification'] = $notification_message;
 
     // Set the session message for the admin's action confirmation
-    if ($new_status === 'confirmed') {
-        $_SESSION['notification'] = "The booking has been confirmed successfully.";
-    } elseif ($new_status === 'canceled') {
-        $_SESSION['notification'] = "The booking has been canceled successfully.";
-    }
+    $_SESSION['notification'] = ($new_status === 'confirmed') 
+        ? "The booking has been confirmed successfully." 
+        : "The booking has been canceled successfully.";
 
     // Redirect to the same page to show the notification
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Location: ' . $_SERVER['PHP_SELF'] . '?page=' . $current_page);
     exit;
 }
 ?>
@@ -79,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'], $_POST['
         <div class="alert alert-info">
             <?= $_SESSION['notification']; ?>
         </div>
-        <?php unset($_SESSION['notification']); ?> <!-- Clear the notification after displaying it -->
+        <?php unset($_SESSION['notification']); ?>
     <?php endif; ?>
 
     <div class="table-responsive">
@@ -145,6 +160,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['booking_id'], $_POST['
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-4">
+            <?php if ($current_page > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?= $current_page - 1 ?>">Previous</a>
+                </li>
+            <?php endif; ?>
+
+            <?php for ($page = 1; $page <= $total_pages; $page++): ?>
+                <li class="page-item <?= ($page == $current_page) ? 'active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <?php if ($current_page < $total_pages): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?= $current_page + 1 ?>">Next</a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
 </div>
 
 <?php include '../includes/admin_footer.php'; ?>
