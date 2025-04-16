@@ -2,7 +2,6 @@
 include 'includes/db_connection.php';
 include 'includes/header.php';
 
-// Ensure session is started only if it's not already active
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

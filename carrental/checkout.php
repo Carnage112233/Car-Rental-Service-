@@ -48,7 +48,6 @@ if (isset($_GET['car_id'], $_GET['start_date'], $_GET['end_date'], $_GET['bookin
         // Get the inserted booking_id
         $booking_id = $pdo->lastInsertId();
 
-        // Insert payment details into the database
         // Insert payment details into the database (Fix: Initially set 'pending')
         $payment_method = 'credit_card';
         $stmt = $pdo->prepare("INSERT INTO payments (booking_id, user_id, amount, payment_method, payment_status) VALUES (?, ?, ?, ?, ?)");
