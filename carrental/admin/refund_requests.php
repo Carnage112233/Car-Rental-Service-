@@ -1,7 +1,7 @@
 <?php
 require_once("../includes/db_connection.php");
 include '../includes/admin_header.php'; 
-session_start();
+
 
 
 try {
