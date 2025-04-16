@@ -41,7 +41,7 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card h-100 text-center">
-                        <img src="../carrental/assets/images/browse car1.jpg" class="card-img-top" alt="Luxury Sedan" loading="lazy" width="400" height="250">
+                        <img src="./assets/images/browse car1.jpg" class="card-img-top" alt="Luxury Sedan" loading="lazy" width="400" height="250">
                         <div class="card-body">
                             <h3 class="card-title">Luxury Sedan</h3>
                             <p class="card-text">Comfort and style for business or leisure.</p>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 text-center">
-                        <img src="../carrental/assets/images/browse car3.jpg" class="card-img-top" alt="SUV" loading="lazy" width="400" height="250">
+                        <img src="./assets/images/browse car3.jpg" class="card-img-top" alt="SUV" loading="lazy" width="400" height="250">
                         <div class="card-body">
                             <h3 class="card-title">SUV</h3>
                             <p class="card-text">Perfect for family trips and off-road adventures.</p>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card h-100 text-center">
-                        <img src="../carrental/assets/images/browse car2.jpg" class="card-img-top" alt="Sports Car" loading="lazy" width="400" height="250">
+                        <img src="./assets/images/browse car2.jpg" class="card-img-top" alt="Sports Car" loading="lazy" width="400" height="250">
                         <div class="card-body">
                             <h3 class="card-title">Sports Car</h3>
                             <p class="card-text">Experience speed and performance like never before.</p>
