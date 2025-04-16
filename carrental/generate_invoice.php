@@ -48,6 +48,7 @@ $logo_x = ($page_width - $logo_width) / 2;
 
 $pdf->Image('assets/images/DriveEasee.png', $logo_x, 10, $logo_width); 
 
+
 $pdf->Ln(30);  
 $pdf->SetFont('Arial', 'B', 16);
 $pdf->Cell(190, 10, "Booking Invoice", 0, 1, 'C');
